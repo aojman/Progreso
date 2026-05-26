@@ -39,10 +39,10 @@ nav button.on .nd{visibility:visible;}
 .inp:focus{border-color:rgba(110,231,183,0.5);}
 .inp::placeholder{color:#374151;}
 input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
+.city-hint{font-size:11px;color:var(--muted);margin-top:5px;padding-left:2px;}
 .ck{display:flex;align-items:center;gap:12px;cursor:pointer;border-radius:14px;padding:13px 15px;border:1.5px solid var(--brd);background:rgba(255,255,255,0.03);transition:all .15s;user-select:none;margin-bottom:9px;}
 .cb{width:25px;height:25px;border-radius:7px;flex-shrink:0;border:2px solid #374151;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:transparent;transition:all .15s;}
 .ct{font-size:14px;font-weight:600;}.cs{font-size:11px;color:var(--muted);margin-top:1px;}
-.btn-g{width:100%;padding:15px;background:linear-gradient(135deg,var(--green),var(--teal));border:none;border-radius:14px;color:#052e16;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:6px;}
 .btn-s{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;background:linear-gradient(135deg,var(--green),var(--teal));border:none;border-radius:30px;color:#052e16;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;}
 .hero{background:var(--card);border:1px solid rgba(110,231,183,.22);border-radius:16px;padding:20px;margin-bottom:12px;text-align:center;}
 .hv{font-size:10px;color:var(--muted);letter-spacing:1.2px;font-weight:700;}
@@ -92,8 +92,13 @@ tr:nth-child(even) td{background:rgba(255,255,255,.015);}
 <div class="pg on" id="pg-reg">
   <h2>Registrar día</h2>
   <p id="last-p" style="font-size:12px;color:var(--muted);margin-bottom:18px;margin-top:2px"></p>
-  <div class="fld"><span class="lbl">FECHA (DD/MM)</span><input class="inp" id="f-date" placeholder="09/05" maxlength="5"/></div>
-  <div class="fld"><span class="lbl">PESO (kg) — opcional</span><input class="inp" id="f-peso" type="number" step="0.1" placeholder="89.0"/></div>
+  <div class="fld"><span class="lbl">FECHA (DD/MM)</span><input class="inp" id="f-date" placeholder="25/05" maxlength="5"/></div>
+  <div class="fld">
+    <span class="lbl">CIUDAD</span>
+    <input class="inp" id="f-city" placeholder="Las Vegas"/>
+    <p class="city-hint" id="city-hint"></p>
+  </div>
+  <div class="fld"><span class="lbl">PESO (kg) — opcional</span><input class="inp" id="f-peso" type="number" step="0.1" placeholder="88.0"/></div>
   <div class="fld"><span class="lbl">BODY FAT (%) — opcional</span><input class="inp" id="f-bf" type="number" step="0.1" placeholder="26.5"/></div>
   <div class="fld"><span class="lbl">KM CAMINADOS — opcional</span><input class="inp" id="f-km" type="number" step="0.1" placeholder="5.0"/></div>
   <div class="fld"><span class="lbl">KM EN BICICLETA — opcional</span><input class="inp" id="f-bike" type="number" step="0.1" placeholder="10.0"/></div>
@@ -101,7 +106,7 @@ tr:nth-child(even) td{background:rgba(255,255,255,.015);}
   <div class="ck" id="ck-vuelo" onclick="tog('vuelo')" data-c="#93c5fd"><div class="cb" id="cb-vuelo"></div><div><div class="ct" id="cm-vuelo">✈️ Viajé en avión</div><div class="cs">Marcar si hubo vuelo este día</div></div></div>
   <div class="ck" id="ck-iny" onclick="tog('iny')" data-c="#f472b6"><div class="cb" id="cb-iny"></div><div><div class="ct" id="cm-iny">💉 Me apliqué inyección</div><div class="cs">Registrar dosis del tratamiento</div></div></div>
   <div class="ck" id="ck-gym" onclick="tog('gym')" data-c="#fcd34d"><div class="cb" id="cb-gym"></div><div><div class="ct" id="cm-gym">🏋️ Fui al gimnasio</div><div class="cs">Sesión de entrenamiento</div></div></div>
-  <div class="fld" style="margin-top:4px"><span class="lbl">COMENTARIO — opcional</span><input class="inp" id="f-nota" placeholder="ej: comí afuera, viaje a Buenos Aires..."/></div>
+  <div class="fld" style="margin-top:4px"><span class="lbl">COMENTARIO — opcional</span><input class="inp" id="f-nota" placeholder="ej: comí afuera..."/></div>
 </div>
 
 <!-- RESUMEN -->
@@ -167,11 +172,11 @@ tr:nth-child(even) td{background:rgba(255,255,255,.015);}
 <div class="pg" id="pg-graf">
   <h2 style="margin-bottom:16px">Gráficas</h2>
   <div class="cc"><p class="ct2" style="color:var(--green)">⚖️ Peso (kg)</p><canvas id="c-peso"></canvas></div>
-  <div class="cc" id="wrap-bf"><p class="ct2" style="color:var(--orange)">🔥 Body fat (%)</p><div id="ph-bf" class="ph">Ingresá body fat % para ver esta gráfica</div><canvas id="c-bf" style="display:none"></canvas><p style="font-size:10px;color:var(--muted);margin-top:6px;padding-left:4px">Atlético &lt;14 · Fitness 14–17 · Normal 18–24 · Alto ≥25</p></div>
-  <div class="cc" id="wrap-comp"><p class="ct2" style="color:var(--teal)">💪 Masa grasa vs magra (kg)</p><div id="ph-comp" class="ph">Ingresá body fat % para ver esta gráfica</div><canvas id="c-comp" style="display:none"></canvas><div style="display:flex;gap:14px;padding-left:4px;margin-top:6px;font-size:10px;color:var(--muted)"><span><span style="width:10px;height:10px;border-radius:2px;background:var(--orange);display:inline-block;margin-right:4px"></span>Grasa</span><span><span style="width:10px;height:10px;border-radius:2px;background:var(--teal);display:inline-block;margin-right:4px"></span>Magra</span></div></div>
+  <div class="cc"><p class="ct2" style="color:var(--orange)">🔥 Body fat (%)</p><div id="ph-bf" class="ph">Ingresá body fat % para ver esta gráfica</div><canvas id="c-bf" style="display:none"></canvas><p style="font-size:10px;color:var(--muted);margin-top:6px;padding-left:4px">Atlético &lt;14 · Fitness 14–17 · Normal 18–24 · Alto ≥25</p></div>
+  <div class="cc"><p class="ct2" style="color:var(--teal)">💪 Masa grasa vs magra (kg)</p><div id="ph-comp" class="ph">Ingresá body fat % para ver esta gráfica</div><canvas id="c-comp" style="display:none"></canvas><div style="display:flex;gap:14px;padding-left:4px;margin-top:6px;font-size:10px;color:var(--muted)"><span><span style="width:10px;height:10px;border-radius:2px;background:var(--orange);display:inline-block;margin-right:4px"></span>Grasa</span><span><span style="width:10px;height:10px;border-radius:2px;background:var(--teal);display:inline-block;margin-right:4px"></span>Magra</span></div></div>
   <div class="cc"><p class="ct2" style="color:var(--blue)">🚶 Km caminados</p><canvas id="c-km"></canvas><p style="font-size:10px;color:var(--muted);margin-top:6px;padding-left:4px">🟣 1–4 · 🔵 4–7 · 🩵 7+ km</p></div>
-  <div class="cc" id="wrap-bike"><p class="ct2" style="color:var(--purple)">🚴 Km en bicicleta</p><div id="ph-bike" class="ph">Ingresá km en bici para ver esta gráfica</div><canvas id="c-bike" style="display:none"></canvas></div>
-  <div class="cc" id="wrap-imc"><p class="ct2" style="color:var(--teal)">📊 IMC / BMI</p><div id="ph-imc" class="ph">El IMC se calcula automáticamente al ingresar peso (requiere altura guardada)</div><canvas id="c-imc" style="display:none"></canvas></div>
+  <div class="cc"><p class="ct2" style="color:var(--purple)">🚴 Km en bicicleta</p><div id="ph-bike" class="ph">Ingresá km en bici para ver esta gráfica</div><canvas id="c-bike" style="display:none"></canvas></div>
+  <div class="cc"><p class="ct2" style="color:var(--teal)">📊 IMC / BMI</p><div id="ph-imc" class="ph">Se calcula automáticamente con peso + altura</div><canvas id="c-imc" style="display:none"></canvas></div>
 </div>
 
 <!-- EVENTOS -->
@@ -185,20 +190,17 @@ tr:nth-child(even) td{background:rgba(255,255,255,.015);}
 <div class="pg" id="pg-tabla">
   <h2 style="margin-bottom:16px">Tabla completa</h2>
   <div class="tw">
-    <table><thead><tr><th>Fecha</th><th>Peso</th><th>BF%</th><th>IMC</th><th>🚶</th><th>🚴</th><th></th><th>Nota</th></tr></thead>
+    <table><thead><tr><th>Fecha</th><th>Ciudad</th><th>Peso</th><th>BF%</th><th>IMC</th><th>🚶</th><th>🚴</th><th></th><th>Nota</th></tr></thead>
     <tbody id="t-body"></tbody></table>
   </div>
-  <!-- Export buttons BELOW the table -->
   <div class="export-row">
-    <button class="btn-exp" onclick="exportXLSX()" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;">📊 Exportar Excel</button>
-    <button class="btn-exp" onclick="exportCSV()" style="background:linear-gradient(135deg,var(--blue),#6366f1);color:#fff;">📄 Exportar CSV</button>
+    <button class="btn-exp" onclick="exportXLSX()" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;">📊 Excel</button>
+    <button class="btn-exp" onclick="exportCSV()" style="background:linear-gradient(135deg,var(--blue),#6366f1);color:#fff;">📄 CSV</button>
   </div>
 </div>
 
-</div><!-- /scr -->
-
+</div>
 <div id="save-bar"><button onclick="guardar()">Guardar registro</button></div>
-
 <nav>
   <button class="on" onclick="ir('reg',this)"><span class="ni">📝</span><span class="nl">Registrar</span><div class="nd"></div></button>
   <button onclick="ir('dash',this)"><span class="ni">📊</span><span class="nl">Resumen</span><div class="nd"></div></button>
@@ -210,145 +212,128 @@ tr:nth-child(even) td{background:rgba(255,255,255,.015);}
 <div id="toast"></div>
 
 <script>
-// ── DATA — hardcoded, never lost ──────────────────────────────────────────────
+// ── BASE DATA (hardcoded, never lost) ─────────────────────────────────────────
 var BASE = [
-  {date:"04/03",peso:100.7,bf:null, imc:null, km:null, bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"27/03",peso:100.0,bf:null, imc:null, km:null, bike:null,vuelo:false,iny:true,  gym:false,nota:"1a inyeccion"},
-  {date:"28/03",peso:99.2, bf:null, imc:null, km:null, bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"29/03",peso:99.0, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"30/03",peso:98.8, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"31/03",peso:97.9, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"01/04",peso:97.8, bf:null, imc:null, km:4.7,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"02/04",peso:97.1, bf:null, imc:null, km:7.5,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"03/04",peso:97.4, bf:null, imc:null, km:null, bike:null,vuelo:false,iny:true,  gym:false,nota:"2a inyeccion"},
-  {date:"04/04",peso:97.4, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"05/04",peso:97.7, bf:null, imc:null, km:7.5,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"06/04",peso:97.9, bf:null, imc:null, km:0,    bike:null,vuelo:false,iny:false, gym:false,nota:"No camine"},
-  {date:"07/04",peso:96.9, bf:null, imc:null, km:7,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"08/04",peso:96.7, bf:null, imc:null, km:7,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"09/04",peso:96.3, bf:null, imc:null, km:10,   bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"10/04",peso:96.4, bf:null, imc:29.8, km:7,    bike:null,vuelo:false,iny:true,  gym:false,nota:"Inyeccion"},
-  {date:"11/04",peso:96.0, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"12/04",peso:95.8, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"13/04",peso:95.6, bf:null, imc:null, km:5,    bike:null,vuelo:true, iny:false, gym:false,nota:"Viaje a PTY"},
-  {date:"14/04",peso:null, bf:null, imc:null, km:4,    bike:null,vuelo:false,iny:false, gym:false,nota:"PTY"},
-  {date:"15/04",peso:null, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:"PTY"},
-  {date:"16/04",peso:null, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:"PTY"},
-  {date:"17/04",peso:null, bf:null, imc:null, km:5.5,  bike:null,vuelo:false,iny:false, gym:false,nota:"PTY"},
-  {date:"18/04",peso:null, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:true,  gym:false,nota:"Inyeccion"},
-  {date:"19/04",peso:94.1, bf:null, imc:null, km:0,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"20/04",peso:94.8, bf:null, imc:null, km:0,    bike:null,vuelo:true, iny:false, gym:false,nota:"Viaje a Chile"},
-  {date:"21/04",peso:null, bf:null, imc:null, km:2,    bike:null,vuelo:false,iny:false, gym:true, nota:"Gimnasio 30 min"},
-  {date:"22/04",peso:null, bf:null, imc:null, km:4,    bike:null,vuelo:false,iny:false, gym:false,nota:"Chile"},
-  {date:"23/04",peso:null, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:"Chile"},
-  {date:"24/04",peso:null, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:"Chile"},
-  {date:"25/04",peso:93.0, bf:null, imc:28.7, km:4,    bike:null,vuelo:false,iny:true,  gym:false,nota:"Inyeccion"},
-  {date:"26/04",peso:93.3, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"27/04",peso:93.2, bf:null, imc:null, km:3,    bike:null,vuelo:true, iny:false, gym:false,nota:"Viaje a Panama"},
-  {date:"28/04",peso:null, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"29/04",peso:92.0, bf:null, imc:28.4, km:4,    bike:null,vuelo:false,iny:false, gym:false,nota:"Cambio de balanza"},
-  {date:"30/04",peso:null, bf:null, imc:null, km:null, bike:null,vuelo:true, iny:false, gym:false,nota:"Vuelo"},
-  {date:"01/05",peso:90.6, bf:null, imc:28.0, km:7,    bike:null,vuelo:false,iny:true,  gym:false,nota:"Inyeccion"},
-  {date:"02/05",peso:91.4, bf:null, imc:28.2, km:7,    bike:2.5, vuelo:false,iny:false, gym:false,nota:""},
-  {date:"03/05",peso:91.1, bf:null, imc:28.1, km:4.7,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"04/05",peso:90.8, bf:27.0, imc:28.0, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"05/05",peso:90.2, bf:26.5, imc:27.8, km:null, bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"06/05",peso:89.9, bf:26.6, imc:27.7, km:7,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"07/05",peso:89.9, bf:26.5, imc:27.7, km:7,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"08/05",peso:89.4, bf:26.5, imc:27.6, km:null, bike:null,vuelo:false,iny:false, gym:false,nota:""}
+  {date:"04/03",city:"",     peso:100.7,bf:null, imc:null, km:null, bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"27/03",city:"",     peso:100.0,bf:null, imc:null, km:null, bike:null,vuelo:false,iny:true,  gym:false,nota:"1a inyeccion"},
+  {date:"28/03",city:"",     peso:99.2, bf:null, imc:null, km:null, bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"29/03",city:"",     peso:99.0, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"30/03",city:"",     peso:98.8, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"31/03",city:"",     peso:97.9, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"01/04",city:"",     peso:97.8, bf:null, imc:null, km:4.7,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"02/04",city:"",     peso:97.1, bf:null, imc:null, km:7.5,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"03/04",city:"",     peso:97.4, bf:null, imc:null, km:null, bike:null,vuelo:false,iny:true,  gym:false,nota:"2a inyeccion"},
+  {date:"04/04",city:"",     peso:97.4, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"05/04",city:"",     peso:97.7, bf:null, imc:null, km:7.5,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"06/04",city:"",     peso:97.9, bf:null, imc:null, km:0,    bike:null,vuelo:false,iny:false, gym:false,nota:"No camine"},
+  {date:"07/04",city:"",     peso:96.9, bf:null, imc:null, km:7,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"08/04",city:"",     peso:96.7, bf:null, imc:null, km:7,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"09/04",city:"",     peso:96.3, bf:null, imc:null, km:10,   bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"10/04",city:"",     peso:96.4, bf:null, imc:29.8, km:7,    bike:null,vuelo:false,iny:true,  gym:false,nota:"Inyeccion"},
+  {date:"11/04",city:"",     peso:96.0, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"12/04",city:"",     peso:95.8, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"13/04",city:"PTY",  peso:95.6, bf:null, imc:null, km:5,    bike:null,vuelo:true, iny:false, gym:false,nota:"Viaje a PTY"},
+  {date:"14/04",city:"PTY",  peso:null, bf:null, imc:null, km:4,    bike:null,vuelo:false,iny:false, gym:false,nota:"PTY"},
+  {date:"15/04",city:"PTY",  peso:null, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:"PTY"},
+  {date:"16/04",city:"PTY",  peso:null, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:"PTY"},
+  {date:"17/04",city:"PTY",  peso:null, bf:null, imc:null, km:5.5,  bike:null,vuelo:false,iny:false, gym:false,nota:"PTY"},
+  {date:"18/04",city:"PTY",  peso:null, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:true,  gym:false,nota:"Inyeccion"},
+  {date:"19/04",city:"",     peso:94.1, bf:null, imc:null, km:0,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"20/04",city:"Chile",peso:94.8, bf:null, imc:null, km:0,    bike:null,vuelo:true, iny:false, gym:false,nota:"Viaje a Chile"},
+  {date:"21/04",city:"Chile",peso:null, bf:null, imc:null, km:2,    bike:null,vuelo:false,iny:false, gym:true, nota:"Gimnasio 30 min"},
+  {date:"22/04",city:"Chile",peso:null, bf:null, imc:null, km:4,    bike:null,vuelo:false,iny:false, gym:false,nota:"Chile"},
+  {date:"23/04",city:"Chile",peso:null, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:"Chile"},
+  {date:"24/04",city:"Chile",peso:null, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:"Chile"},
+  {date:"25/04",city:"",     peso:93.0, bf:null, imc:28.7, km:4,    bike:null,vuelo:false,iny:true,  gym:false,nota:"Inyeccion"},
+  {date:"26/04",city:"",     peso:93.3, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"27/04",city:"Panama",peso:93.2,bf:null, imc:null, km:3,    bike:null,vuelo:true, iny:false, gym:false,nota:"Viaje a Panama"},
+  {date:"28/04",city:"Panama",peso:null,bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"29/04",city:"",     peso:92.0, bf:null, imc:28.4, km:4,    bike:null,vuelo:false,iny:false, gym:false,nota:"Cambio de balanza"},
+  {date:"30/04",city:"",     peso:null, bf:null, imc:null, km:null, bike:null,vuelo:true, iny:false, gym:false,nota:"Vuelo"},
+  {date:"01/05",city:"",     peso:90.6, bf:null, imc:28.0, km:7,    bike:null,vuelo:false,iny:true,  gym:false,nota:"Inyeccion"},
+  {date:"02/05",city:"",     peso:91.4, bf:null, imc:28.2, km:7,    bike:2.5, vuelo:false,iny:false, gym:false,nota:""},
+  {date:"03/05",city:"",     peso:91.1, bf:null, imc:28.1, km:4.7,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"04/05",city:"",     peso:90.8, bf:27.0, imc:28.0, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"05/05",city:"",     peso:90.2, bf:26.5, imc:27.8, km:null, bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"06/05",city:"",     peso:89.9, bf:26.6, imc:27.7, km:7,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"07/05",city:"",     peso:89.9, bf:26.5, imc:27.7, km:7,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"08/05",city:"",     peso:89.4, bf:26.5, imc:27.6, km:null, bike:null,vuelo:false,iny:true,  gym:false,nota:"Inyeccion"},
+  {date:"09/05",city:"",     peso:88.6, bf:26.7, imc:27.3, km:3,    bike:13.5,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"10/05",city:"",     peso:88.6, bf:26.1, imc:27.3, km:4.7,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"11/05",city:"",     peso:89.5, bf:26.4, imc:27.6, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"12/05",city:"",     peso:88.1, bf:24.4, imc:27.2, km:null, bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"13/05",city:"",     peso:88.9, bf:24.7, imc:27.4, km:null, bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"14/05",city:"",     peso:88.8, bf:25.1, imc:27.4, km:null, bike:null,vuelo:true, iny:true,  gym:false,nota:"Inyeccion · Vuelo"},
+  {date:"15/05",city:"",     peso:null, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"16/05",city:"",     peso:null, bf:null, imc:null, km:9.7,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"17/05",city:"",     peso:null, bf:null, imc:null, km:12,   bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"18/05",city:"",     peso:null, bf:null, imc:null, km:12,   bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"19/05",city:"",     peso:null, bf:null, imc:null, km:9.2,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"20/05",city:"",     peso:null, bf:null, imc:null, km:10,   bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"21/05",city:"Las Vegas",peso:null,bf:null,imc:null,km:22,  bike:null,vuelo:false,iny:false, gym:false,nota:"En las vegas de paseo con Lau"},
+  {date:"22/05",city:"Las Vegas",peso:null,bf:null,imc:null,km:11.5,bike:null,vuelo:false,iny:false, gym:false,nota:"Cambio de hotel en las vegas"},
+  {date:"23/05",city:"Las Vegas",peso:null,bf:null,imc:null,km:21,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
+  {date:"24/05",city:"Las Vegas",peso:null,bf:null,imc:null,km:12,  bike:null,vuelo:false,iny:false, gym:false,nota:""}
 ];
 
-// Storage: new entries go on top of BASE
-var SK = "ht_new_v1", SK_ALT = "ht_altura_v1";
+var SK="ht_v13", SK_ALT="ht_altura_v1";
+function loadExtra(){try{var r=localStorage.getItem(SK);return r?JSON.parse(r):[];}catch(e){return[];}}
+function saveExtra(a){try{localStorage.setItem(SK,JSON.stringify(a));}catch(e){}}
+function getAlt(){try{var v=localStorage.getItem(SK_ALT);return v?+v:null;}catch(e){return null;}}
+function setAlt(v){try{localStorage.setItem(SK_ALT,""+v);}catch(e){}}
 
-function loadExtra() {
-  try { var r=localStorage.getItem(SK); return r?JSON.parse(r):[]; } catch(e){return [];}
-}
-function saveExtra(arr) {
-  try { localStorage.setItem(SK, JSON.stringify(arr)); } catch(e){}
-}
-function getAlt() { try{var v=localStorage.getItem(SK_ALT);return v?+v:null;}catch(e){return null;} }
-function setAlt(v) { try{localStorage.setItem(SK_ALT,""+v);}catch(e){} }
-
-// Merge BASE + extra, extra overrides BASE for same date
-function buildD() {
-  var extra = loadExtra();
-  var map = {};
-  BASE.forEach(function(r){ map[r.date] = Object.assign({},r); });
+function buildD(){
+  var extra=loadExtra(), map={};
+  BASE.forEach(function(r){map[r.date]=Object.assign({},r);});
   extra.forEach(function(r){
-    if (map[r.date]) {
-      // merge: only overwrite non-null fields
-      var e = map[r.date];
-      if (r.peso  != null) e.peso  = r.peso;
-      if (r.bf    != null) e.bf    = r.bf;
-      if (r.imc   != null) e.imc   = r.imc;
-      if (r.km    != null) e.km    = r.km;
-      if (r.bike  != null) e.bike  = r.bike;
-      if (r.vuelo) e.vuelo = true;
-      if (r.iny)   e.iny   = true;
-      if (r.gym)   e.gym   = true;
-      if (r.nota)  e.nota  = e.nota ? e.nota+" · "+r.nota : r.nota;
+    if(map[r.date]){
+      var e=map[r.date];
+      if(r.city)        e.city =r.city;
+      if(r.peso !=null) e.peso =r.peso;
+      if(r.bf   !=null) e.bf   =r.bf;
+      if(r.imc  !=null) e.imc  =r.imc;
+      if(r.km   !=null) e.km   =r.km;
+      if(r.bike !=null) e.bike =r.bike;
+      if(r.vuelo)       e.vuelo=true;
+      if(r.iny)         e.iny  =true;
+      if(r.gym)         e.gym  =true;
+      if(r.nota)        e.nota =e.nota?(e.nota+" · "+r.nota):r.nota;
     } else {
-      map[r.date] = Object.assign({},r);
+      map[r.date]=Object.assign({},r);
     }
   });
-  var arr = Object.values(map);
+  var arr=Object.values(map);
   arr.sort(function(a,b){
     var pa=a.date.split("/"),pb=b.date.split("/");
-    var ma=+pa[1],da=+pa[0],mb=+pb[1],db=+pb[0];
-    return ma!==mb?ma-mb:da-db;
+    return +pa[1]!==+pb[1]?+pa[1]-+pb[1]:+pa[0]-+pb[0];
   });
   return arr;
 }
-
-var D = buildD();
+var D=buildD();
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
-function bfCalc(peso,bf){
-  if(!peso||!bf)return null;
-  var fg=Math.round(peso*bf/100*10)/10;
-  var lm=Math.round((peso-fg)*10)/10;
-  var bw=Math.round(lm*0.73*10)/10;
-  return{fg:fg,lm:lm,bw:bw};
+function lastCity(){
+  for(var i=D.length-1;i>=0;i--){if(D[i].city)return D[i].city;}
+  return "";
 }
-function bfCat(v){
-  if(v==null)return{label:"—",color:"var(--muted)"};
-  if(v<6)  return{label:"Esencial",color:"var(--blue)"};
-  if(v<14) return{label:"Atlético",color:"var(--teal)"};
-  if(v<18) return{label:"Fitness", color:"var(--green)"};
-  if(v<25) return{label:"Normal",  color:"var(--amber)"};
-  return       {label:"Alto",    color:"var(--red)"};
-}
-function calcIMC(peso,alt){if(!peso||!alt)return null;var h=alt/100;return Math.round(peso/(h*h)*10)/10;}
-function imcCat(v){
-  if(v==null)return{label:"—",color:"var(--muted)"};
-  if(v<18.5)return{label:"Bajo peso",color:"#60a5fa"};
-  if(v<25)  return{label:"Normal",   color:"var(--green)"};
-  if(v<30)  return{label:"Sobrepeso",color:"var(--amber)"};
-  return         {label:"Obesidad", color:"var(--red)"};
-}
+function bfCalc(p,b){if(!p||!b)return null;var fg=Math.round(p*b/100*10)/10,lm=Math.round((p-fg)*10)/10,bw=Math.round(lm*0.73*10)/10;return{fg:fg,lm:lm,bw:bw};}
+function bfCat(v){if(v==null)return{label:"—",color:"var(--muted)"};if(v<6)return{label:"Esencial",color:"var(--blue)"};if(v<14)return{label:"Atlético",color:"var(--teal)"};if(v<18)return{label:"Fitness",color:"var(--green)"};if(v<25)return{label:"Normal",color:"var(--amber)"};return{label:"Alto",color:"var(--red)"};}
+function calcIMC(p,a){if(!p||!a)return null;var h=a/100;return Math.round(p/(h*h)*10)/10;}
+function imcCat(v){if(v==null)return{label:"—",color:"var(--muted)"};if(v<18.5)return{label:"Bajo peso",color:"#60a5fa"};if(v<25)return{label:"Normal",color:"var(--green)"};if(v<30)return{label:"Sobrepeso",color:"var(--amber)"};return{label:"Obesidad",color:"var(--red)"};}
 function imcPct(v){return Math.min(100,Math.max(0,(v-15)/25*100));}
-
 function stats(){
-  var wp=D.filter(function(d){return d.peso!=null;});
-  var pi=wp.length?wp[0].peso:0,pa=wp.length?wp[wp.length-1].peso:0;
-  var pm=wp.length?Math.min.apply(null,wp.map(function(d){return d.peso;})):0;
-  var pmDate="";for(var i=0;i<D.length;i++){if(D[i].peso===pm){pmDate=D[i].date;break;}}
+  var wp=D.filter(function(d){return d.peso!=null;}),pi=wp.length?wp[0].peso:0,pa=wp.length?wp[wp.length-1].peso:0;
+  var pm=wp.length?Math.min.apply(null,wp.map(function(d){return d.peso;})):0,pmDate="";
+  for(var i=0;i<D.length;i++){if(D[i].peso===pm){pmDate=D[i].date;break;}}
   var kmT=0,bkT=0,dKm=0,dBk=0;
   D.forEach(function(d){kmT+=(d.km||0);bkT+=(d.bike||0);if((d.km||0)>0)dKm++;if((d.bike||0)>0)dBk++;});
-  var wbf=D.filter(function(d){return d.bf!=null&&d.peso!=null;});
-  var wimc=D.filter(function(d){return d.imc!=null;});
-  return{
-    pi:pi,pa:pa,pm:pm,pmDate:pmDate,
-    kmTotal:Math.round(kmT*10)/10,bikeTotal:Math.round(bkT*10)/10,
-    diasKm:dKm,diasBike:dBk,
-    vuelos:D.filter(function(d){return d.vuelo;}).length,
-    inyecciones:D.filter(function(d){return d.iny;}).length,
+  var wbf=D.filter(function(d){return d.bf!=null&&d.peso!=null;}),wimc=D.filter(function(d){return d.imc!=null;});
+  return{pi:pi,pa:pa,pm:pm,pmDate:pmDate,kmTotal:Math.round(kmT*10)/10,bikeTotal:Math.round(bkT*10)/10,diasKm:dKm,diasBike:dBk,
+    vuelos:D.filter(function(d){return d.vuelo;}).length,inyecciones:D.filter(function(d){return d.iny;}).length,
     bajada:Math.round((pi-pa)*10)/10,bajadaMax:Math.round((pi-pm)*10)/10,
     bfI:wbf.length?wbf[0].bf:null,bfA:wbf.length?wbf[wbf.length-1].bf:null,
     pesoI:wbf.length?wbf[0].peso:null,pesoA:wbf.length?wbf[wbf.length-1].peso:null,
-    imcI:wimc.length?wimc[0].imc:null,imcA:wimc.length?wimc[wimc.length-1].imc:null
-  };
+    imcI:wimc.length?wimc[0].imc:null,imcA:wimc.length?wimc[wimc.length-1].imc:null};
 }
 
 // ── CHECKBOXES ────────────────────────────────────────────────────────────────
@@ -364,8 +349,7 @@ function tog(k){
 function ir(id,btn){
   document.querySelectorAll(".pg").forEach(function(p){p.classList.remove("on");});
   document.querySelectorAll("nav button").forEach(function(b){b.classList.remove("on");});
-  document.getElementById("pg-"+id).classList.add("on");
-  btn.classList.add("on");
+  document.getElementById("pg-"+id).classList.add("on");btn.classList.add("on");
   document.getElementById("scr").scrollTop=0;
   document.getElementById("save-bar").style.display=(id==="reg")?"block":"none";
   if(id==="dash")  renderDash();
@@ -374,68 +358,57 @@ function ir(id,btn){
   if(id==="tabla") renderTabla();
 }
 
-// ── TOAST ─────────────────────────────────────────────────────────────────────
 function toast(msg){var t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove("show");},2400);}
-
 function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
 function setCol(id,c){var e=document.getElementById(id);if(e)e.style.color=c;}
 
-// ── LAST PESO ─────────────────────────────────────────────────────────────────
 function renderLastPeso(){
   var wp=D.filter(function(d){return d.peso!=null;}),l=wp[wp.length-1];
   var el=document.getElementById("last-p");
-  if(l){var x=l.bf!=null?" · BF: "+l.bf+"%":"";el.innerHTML='Último: <span style="color:var(--green);font-weight:700">'+l.peso+' kg'+x+'</span> · '+l.date;}
+  if(l){var x=l.bf!=null?" · BF: "+l.bf+"%":"";el.innerHTML='Último: <span style="color:var(--green);font-weight:700">'+l.peso+' kg'+x+'</span> · '+l.date+(l.city?" · "+l.city:"");}
   else el.textContent="";
+  // Pre-fill city with last known city
+  var city=document.getElementById("f-city");
+  var hint=document.getElementById("city-hint");
+  var lc=lastCity();
+  if(city&&!city.value&&lc){city.value=lc;hint.textContent="Igual que ayer ("+lc+") — modificá si cambió";}
 }
 
 // ── GUARDAR ───────────────────────────────────────────────────────────────────
 function guardar(){
   var date=document.getElementById("f-date").value.trim();
   if(!/^\d{2}\/\d{2}$/.test(date)){toast("⚠️ Formato: DD/MM");return;}
+  var cityV=document.getElementById("f-city").value.trim();
   var pesoV=document.getElementById("f-peso").value;
   var bfV  =document.getElementById("f-bf").value;
   var kmV  =document.getElementById("f-km").value;
   var bikeV=document.getElementById("f-bike").value;
   var notaV=document.getElementById("f-nota").value.trim();
   var altEl=document.getElementById("f-alt");
-  var altV =altEl?altEl.value:"";
-  if(altV&&+altV>100){setAlt(+altV);if(altEl)altEl.closest(".fld").style.display="none";}
-  var alt=getAlt();
-  var imcFinal=null;
+  if(altEl&&altEl.value&&+altEl.value>100){setAlt(+altEl.value);altEl.closest(".fld").style.display="none";}
+  var alt=getAlt(),imcFinal=null;
   if(pesoV&&alt)imcFinal=calcIMC(+pesoV,alt);
   var tags=[chks.iny&&"Inyeccion",chks.gym&&"Gym",chks.vuelo&&"Vuelo"].filter(Boolean);
-  var entry={
-    date:date,peso:pesoV!==""?+pesoV:null,bf:bfV!==""?+bfV:null,
-    imc:imcFinal,km:kmV!==""?+kmV:null,bike:bikeV!==""?+bikeV:null,
-    vuelo:chks.vuelo,iny:chks.iny,gym:chks.gym,
-    nota:[notaV].concat(tags).filter(Boolean).join(" · ")
-  };
-  // Save to extra storage
-  var extra=loadExtra();
-  var idx=-1;for(var i=0;i<extra.length;i++){if(extra[i].date===date){idx=i;break;}}
+  var entry={date:date,city:cityV,peso:pesoV!==""?+pesoV:null,bf:bfV!==""?+bfV:null,imc:imcFinal,
+    km:kmV!==""?+kmV:null,bike:bikeV!==""?+bikeV:null,
+    vuelo:chks.vuelo,iny:chks.iny,gym:chks.gym,nota:[notaV].concat(tags).filter(Boolean).join(" · ")};
+  var extra=loadExtra(),idx=-1;
+  for(var i=0;i<extra.length;i++){if(extra[i].date===date){idx=i;break;}}
   if(idx>=0){
-    // merge with existing extra entry
     var ex=extra[idx];
-    if(entry.peso !=null)ex.peso =entry.peso;
-    if(entry.bf   !=null)ex.bf   =entry.bf;
-    if(entry.imc  !=null)ex.imc  =entry.imc;
-    if(entry.km   !=null)ex.km   =entry.km;
-    if(entry.bike !=null)ex.bike =entry.bike;
-    if(entry.vuelo)ex.vuelo=true;
-    if(entry.iny)  ex.iny  =true;
-    if(entry.gym)  ex.gym  =true;
-    if(entry.nota) ex.nota =ex.nota?(ex.nota+" · "+entry.nota):entry.nota;
+    if(entry.city)        ex.city =entry.city;
+    if(entry.peso !=null) ex.peso =entry.peso;
+    if(entry.bf   !=null) ex.bf   =entry.bf;
+    if(entry.imc  !=null) ex.imc  =entry.imc;
+    if(entry.km   !=null) ex.km   =entry.km;
+    if(entry.bike !=null) ex.bike =entry.bike;
+    if(entry.vuelo) ex.vuelo=true; if(entry.iny) ex.iny=true; if(entry.gym) ex.gym=true;
+    if(entry.nota)  ex.nota=ex.nota?(ex.nota+" · "+entry.nota):entry.nota;
     toast("✏️ Actualizado");
-  } else {
-    extra.push(entry);
-    toast("✅ ¡Guardado!");
-  }
-  saveExtra(extra);
-  D=buildD();
-  document.getElementById("f-peso").value="";
-  document.getElementById("f-bf").value="";
-  document.getElementById("f-km").value="";
-  document.getElementById("f-bike").value="";
+  } else {extra.push(entry);toast("✅ ¡Guardado!");}
+  saveExtra(extra);D=buildD();
+  document.getElementById("f-peso").value="";document.getElementById("f-bf").value="";
+  document.getElementById("f-km").value="";document.getElementById("f-bike").value="";
   document.getElementById("f-nota").value="";
   Object.keys(chks).forEach(function(k){if(chks[k])tog(k);});
   renderLastPeso();
@@ -450,98 +423,52 @@ function renderDash(){
   set("d-km",s.kmTotal+" km");set("d-kms",s.diasKm+" días activos");
   set("d-bk",s.bikeTotal+" km");set("d-bks",s.diasBike+" días en bici");
   set("d-iny",s.inyecciones+" 💉");set("d-vuel",s.vuelos+" ✈️");
-  if(s.imcA!=null){
-    var cat=imcCat(s.imcA),dif=Math.round((s.imcI-s.imcA)*10)/10;
-    set("d-imci",s.imcI);set("d-imca",s.imcA);setCol("d-imca",cat.color);
-    set("d-imcd",dif>0?"↓ "+dif:dif<0?"↑ "+Math.abs(dif):"=");
-    set("d-imccat",cat.label);setCol("d-imccat",cat.color);
-    document.getElementById("d-needle").style.left=imcPct(s.imcA)+"%";
-  }
-  if(s.bfA!=null&&s.pesoA!=null){
-    var bc=bfCalc(s.pesoA,s.bfA),cat2=bfCat(s.bfA),pct=Math.round(s.bfA);
-    set("bc-bf",s.bfA+"%");setCol("bc-bf",cat2.color);set("bc-bfsub",cat2.label);
-    set("bc-fg",bc.fg+" kg");set("bc-lm",bc.lm+" kg");set("bc-bw",bc.bw+" L");
-    document.getElementById("bc-fatbar").style.width=pct+"%";
-    set("bc-fat-lbl","Grasa "+pct+"%");set("bc-lean-lbl","Magra "+(100-pct)+"%");
-  }
-  if(s.bfI!=null&&s.bfA!=null){
-    var dBF=Math.round((s.bfI-s.bfA)*10)/10;
-    set("bf-ini",s.bfI+"%");set("bf-act",s.bfA+"%");
-    set("bf-dif",dBF>0?"↓ "+dBF+"%":"=");
-    if(s.pesoI&&s.pesoA){
-      var fgI=Math.round(s.pesoI*s.bfI/100*10)/10,fgA=Math.round(s.pesoA*s.bfA/100*10)/10,fgD=Math.round((fgI-fgA)*10)/10;
-      set("bf-fgi",fgI+" kg");set("bf-fga",fgA+" kg");set("bf-fgd",fgD>0?"↓ "+fgD+" kg":"=");
-    }
-  }
+  if(s.imcA!=null){var cat=imcCat(s.imcA),dif=Math.round((s.imcI-s.imcA)*10)/10;set("d-imci",s.imcI);set("d-imca",s.imcA);setCol("d-imca",cat.color);set("d-imcd",dif>0?"↓ "+dif:dif<0?"↑ "+Math.abs(dif):"=");set("d-imccat",cat.label);setCol("d-imccat",cat.color);document.getElementById("d-needle").style.left=imcPct(s.imcA)+"%";}
+  if(s.bfA!=null&&s.pesoA!=null){var bc=bfCalc(s.pesoA,s.bfA),cat2=bfCat(s.bfA),pct=Math.round(s.bfA);set("bc-bf",s.bfA+"%");setCol("bc-bf",cat2.color);set("bc-bfsub",cat2.label);set("bc-fg",bc.fg+" kg");set("bc-lm",bc.lm+" kg");set("bc-bw",bc.bw+" L");document.getElementById("bc-fatbar").style.width=pct+"%";set("bc-fat-lbl","Grasa "+pct+"%");set("bc-lean-lbl","Magra "+(100-pct)+"%");}
+  if(s.bfI!=null&&s.bfA!=null){var dBF=Math.round((s.bfI-s.bfA)*10)/10;set("bf-ini",s.bfI+"%");set("bf-act",s.bfA+"%");set("bf-dif",dBF>0?"↓ "+dBF+"%":"=");if(s.pesoI&&s.pesoA){var fgI=Math.round(s.pesoI*s.bfI/100*10)/10,fgA=Math.round(s.pesoA*s.bfA/100*10)/10,fgD=Math.round((fgI-fgA)*10)/10;set("bf-fgi",fgI+" kg");set("bf-fga",fgA+" kg");set("bf-fgd",fgD>0?"↓ "+fgD+" kg":"=");}}
 }
 
 // ── CHARTS ────────────────────────────────────────────────────────────────────
 var charts={};
 function baseOpts(yMin,yMax,showLegend,stepSize){
   var yScale={grid:{color:"rgba(255,255,255,0.04)"},ticks:{color:"#6b7280",font:{size:9}}};
-  if(yMin!==undefined)yScale.min=yMin;
-  if(yMax!==undefined)yScale.max=yMax;
+  if(yMin!==undefined)yScale.min=yMin;if(yMax!==undefined)yScale.max=yMax;
   if(stepSize!==undefined)yScale.ticks={color:"#6b7280",font:{size:9},stepSize:stepSize};
-  return{
-    responsive:false,maintainAspectRatio:false,animation:false,animations:false,transitions:{},
+  return{responsive:false,maintainAspectRatio:false,animation:false,animations:false,transitions:{},
     plugins:{legend:{display:!!showLegend,labels:{color:"#94a3b8",font:{size:10},boxWidth:12}},tooltip:{backgroundColor:"#0f172a",titleColor:"#6ee7b7",bodyColor:"#94a3b8",borderColor:"#1e293b",borderWidth:1,cornerRadius:8,padding:10,animation:false}},
-    scales:{x:{grid:{color:"rgba(255,255,255,0.04)"},ticks:{color:"#6b7280",font:{size:9},maxTicksLimit:9}},y:yScale}
-  };
+    scales:{x:{grid:{color:"rgba(255,255,255,0.04)"},ticks:{color:"#6b7280",font:{size:9},maxTicksLimit:9}},y:yScale}};
 }
 function mk(id,h,cfg){
   if(charts[id]){charts[id].destroy();charts[id]=null;}
   var old=document.getElementById(id);if(!old)return;
   var fresh=document.createElement("canvas");fresh.id=id;
-  var pw=old.parentNode?old.parentNode.clientWidth-28:320;
-  var ph=parseInt(h,10);
+  var pw=old.parentNode?old.parentNode.clientWidth-28:320,ph=parseInt(h,10);
   fresh.width=pw;fresh.height=ph;fresh.style.width=pw+"px";fresh.style.height=ph+"px";
-  old.parentNode.replaceChild(fresh,old);
-  charts[id]=new Chart(fresh,cfg);
+  old.parentNode.replaceChild(fresh,old);charts[id]=new Chart(fresh,cfg);
 }
-function showChart(cid,pid){var c=document.getElementById(cid),p=document.getElementById(pid);if(c)c.style.display="block";if(p)p.style.display="none";}
-function showPh(cid,pid){var c=document.getElementById(cid),p=document.getElementById(pid);if(c)c.style.display="none";if(p)p.style.display="block";}
+function showC(ci,pi){var c=document.getElementById(ci),p=document.getElementById(pi);if(c)c.style.display="block";if(p)p.style.display="none";}
+function showP(ci,pi){var c=document.getElementById(ci),p=document.getElementById(pi);if(c)c.style.display="none";if(p)p.style.display="block";}
 
 function renderGraf(){
-  var pr=D.filter(function(d){return d.peso!=null;});
-  var kr=D.filter(function(d){return d.km!=null;});
-  var br=D.filter(function(d){return d.bike!=null&&d.bike>0;});
-  var bfr=D.filter(function(d){return d.bf!=null&&d.peso!=null;});
+  var pr=D.filter(function(d){return d.peso!=null;}),kr=D.filter(function(d){return d.km!=null;});
+  var br=D.filter(function(d){return d.bike!=null&&d.bike>0;}),bfr=D.filter(function(d){return d.bf!=null&&d.peso!=null;});
   var imcr=D.filter(function(d){return d.imc!=null;});
-
   mk("c-peso","195px",{type:"line",data:{labels:pr.map(function(d){return d.date;}),datasets:[{label:"Peso",data:pr.map(function(d){return d.peso;}),borderColor:"#6ee7b7",backgroundColor:"rgba(110,231,183,0.08)",borderWidth:2.5,pointRadius:3,pointBackgroundColor:"#6ee7b7",tension:0.35,fill:true}]},options:baseOpts(80,102,false,2)});
-
-  if(bfr.length>0){
-    showChart("c-bf","ph-bf");
-    mk("c-bf","185px",{type:"line",data:{labels:bfr.map(function(d){return d.date;}),datasets:[{label:"BF%",data:bfr.map(function(d){return d.bf;}),borderColor:"#fb923c",backgroundColor:"rgba(251,146,60,0.1)",borderWidth:2.5,pointRadius:4,pointBackgroundColor:bfr.map(function(d){return bfCat(d.bf).color;}),tension:0.35,fill:true}]},options:baseOpts()});
-    showChart("c-comp","ph-comp");
-    mk("c-comp","185px",{type:"bar",data:{labels:bfr.map(function(d){return d.date;}),datasets:[{label:"Grasa",data:bfr.map(function(d){return Math.round(d.peso*d.bf/100*10)/10;}),backgroundColor:"rgba(251,146,60,0.75)",borderRadius:3,stack:"s"},{label:"Magra",data:bfr.map(function(d){return Math.round((d.peso-d.peso*d.bf/100)*10)/10;}),backgroundColor:"rgba(45,212,191,0.65)",borderRadius:3,stack:"s"}]},options:baseOpts(undefined,undefined,true)});
-  } else {showPh("c-bf","ph-bf");showPh("c-comp","ph-comp");}
-
+  if(bfr.length>0){showC("c-bf","ph-bf");mk("c-bf","185px",{type:"line",data:{labels:bfr.map(function(d){return d.date;}),datasets:[{label:"BF%",data:bfr.map(function(d){return d.bf;}),borderColor:"#fb923c",backgroundColor:"rgba(251,146,60,0.1)",borderWidth:2.5,pointRadius:4,pointBackgroundColor:bfr.map(function(d){return bfCat(d.bf).color;}),tension:0.35,fill:true}]},options:baseOpts()});showC("c-comp","ph-comp");mk("c-comp","185px",{type:"bar",data:{labels:bfr.map(function(d){return d.date;}),datasets:[{label:"Grasa",data:bfr.map(function(d){return Math.round(d.peso*d.bf/100*10)/10;}),backgroundColor:"rgba(251,146,60,0.75)",borderRadius:3,stack:"s"},{label:"Magra",data:bfr.map(function(d){return Math.round((d.peso-d.peso*d.bf/100)*10)/10;}),backgroundColor:"rgba(45,212,191,0.65)",borderRadius:3,stack:"s"}]},options:baseOpts(undefined,undefined,true)});}
+  else{showP("c-bf","ph-bf");showP("c-comp","ph-comp");}
   mk("c-km","170px",{type:"bar",data:{labels:kr.map(function(d){return d.date;}),datasets:[{label:"Km",data:kr.map(function(d){return d.km||0;}),backgroundColor:kr.map(function(d){return d.km>=7?"rgba(45,212,191,.85)":d.km>=4?"rgba(147,197,253,.85)":d.km>0?"rgba(129,140,248,.85)":"rgba(55,65,81,.7)";}),borderRadius:4}]},options:baseOpts()});
-
-  if(br.length>0){showChart("c-bike","ph-bike");mk("c-bike","155px",{type:"bar",data:{labels:br.map(function(d){return d.date;}),datasets:[{label:"Km bici",data:br.map(function(d){return d.bike||0;}),backgroundColor:"rgba(167,139,250,0.8)",borderRadius:4}]},options:baseOpts()});}
-  else showPh("c-bike","ph-bike");
-
-  if(imcr.length>0){showChart("c-imc","ph-imc");mk("c-imc","165px",{type:"line",data:{labels:imcr.map(function(d){return d.date;}),datasets:[{label:"IMC",data:imcr.map(function(d){return d.imc;}),borderColor:"#2dd4bf",backgroundColor:"rgba(45,212,191,0.08)",borderWidth:2.5,pointRadius:4,pointBackgroundColor:imcr.map(function(d){return imcCat(d.imc).color;}),tension:0.35,fill:true}]},options:baseOpts(20,36)});}
-  else showPh("c-imc","ph-imc");
+  if(br.length>0){showC("c-bike","ph-bike");mk("c-bike","155px",{type:"bar",data:{labels:br.map(function(d){return d.date;}),datasets:[{label:"Km bici",data:br.map(function(d){return d.bike||0;}),backgroundColor:"rgba(167,139,250,0.8)",borderRadius:4}]},options:baseOpts()});}
+  else{showP("c-bike","ph-bike");}
+  if(imcr.length>0){showC("c-imc","ph-imc");mk("c-imc","165px",{type:"line",data:{labels:imcr.map(function(d){return d.date;}),datasets:[{label:"IMC",data:imcr.map(function(d){return d.imc;}),borderColor:"#2dd4bf",backgroundColor:"rgba(45,212,191,0.08)",borderWidth:2.5,pointRadius:4,pointBackgroundColor:imcr.map(function(d){return imcCat(d.imc).color;}),tension:0.35,fill:true}]},options:baseOpts(20,36)});}
+  else{showP("c-imc","ph-imc");}
 }
 
-// ── EVENTS ────────────────────────────────────────────────────────────────────
 function renderEvents(){
   var s=stats(),pr=D.filter(function(d){return d.peso!=null;});
   var ptC=pr.map(function(d){return d.iny?"#f472b6":d.vuelo?"#93c5fd":d.peso===s.pm?"#fcd34d":"#6ee7b7";});
   var ptR=pr.map(function(d){return(d.iny||d.vuelo||d.peso===s.pm)?7:3;});
-  var emojiPlugin={id:"emojiLabels",afterDatasetsDraw:function(chart){
-    var ctx=chart.ctx,meta=chart.getDatasetMeta(0);
-    ctx.save();ctx.font="13px serif";ctx.textAlign="center";
-    pr.forEach(function(d,i){
-      var icon=d.iny?"💉":d.vuelo?"✈️":d.peso===s.pm?"⭐":null;
-      if(!icon)return;var pt=meta.data[i];if(!pt)return;
-      ctx.fillText(icon,pt.x,pt.y-14);
-    });
-    ctx.restore();
-  }};
-  mk("c-ev","230px",{type:"line",data:{labels:pr.map(function(d){return d.date;}),datasets:[{label:"Peso",data:pr.map(function(d){return d.peso;}),borderColor:"#6ee7b7",backgroundColor:"rgba(110,231,183,0.06)",borderWidth:2,pointRadius:ptR,pointBackgroundColor:ptC,tension:0.35,fill:true}]},options:baseOpts(80,102,false,2),plugins:[emojiPlugin]});
+  var ep={id:"ep",afterDatasetsDraw:function(chart){var ctx=chart.ctx,meta=chart.getDatasetMeta(0);ctx.save();ctx.font="13px serif";ctx.textAlign="center";pr.forEach(function(d,i){var icon=d.iny?"💉":d.vuelo?"✈️":d.peso===s.pm?"⭐":null;if(!icon)return;var pt=meta.data[i];if(!pt)return;ctx.fillText(icon,pt.x,pt.y-14);});ctx.restore();}};
+  mk("c-ev","230px",{type:"line",data:{labels:pr.map(function(d){return d.date;}),datasets:[{label:"Peso",data:pr.map(function(d){return d.peso;}),borderColor:"#6ee7b7",backgroundColor:"rgba(110,231,183,0.06)",borderWidth:2,pointRadius:ptR,pointBackgroundColor:ptC,tension:0.35,fill:true}]},options:baseOpts(80,102,false,2),plugins:[ep]});
   var el=document.getElementById("ev-list");el.innerHTML="";
   D.filter(function(d){return d.iny||d.vuelo||(d.peso!=null&&d.peso===s.pm);}).forEach(function(d){
     var ic=d.iny?"💉":d.vuelo?"✈️":"⭐",col=d.iny?"var(--pink)":d.vuelo?"var(--blue)":"var(--amber)",lb=d.iny?d.nota:d.vuelo?d.nota:"Mínimo histórico";
@@ -551,101 +478,78 @@ function renderEvents(){
   });
 }
 
-// ── TABLE ─────────────────────────────────────────────────────────────────────
 function renderTabla(){
   var tb=document.getElementById("t-body");tb.innerHTML="";
   D.slice().reverse().forEach(function(r){
-    var kc=r.km>0?"var(--blue)":r.km===0?"#ef4444":"#374151";
-    var bkc=(r.bike||0)>0?"var(--purple)":"#374151";
+    var kc=r.km>0?"var(--blue)":r.km===0?"#ef4444":"#374151",bkc=(r.bike||0)>0?"var(--purple)":"#374151";
     var ic=[r.vuelo?"✈️":"",r.iny?"💉":"",r.gym?"🏋️":""].filter(Boolean).join("");
-    var imcC=r.imc?imcCat(r.imc).color:"#374151";
-    var bfC=r.bf?bfCat(r.bf).color:"#374151";
+    var imcC=r.imc?imcCat(r.imc).color:"#374151",bfC=r.bf?bfCat(r.bf).color:"#374151";
     var tr=document.createElement("tr");
     tr.innerHTML='<td style="color:var(--sub);font-weight:600">'+r.date+'</td>'
+      +'<td style="color:var(--sub);font-size:10px">'+(r.city||"")+'</td>'
       +'<td style="color:'+(r.peso?"var(--text)":"#374151")+';font-weight:'+(r.peso?700:400)+'">'+(r.peso!=null?r.peso:"—")+'</td>'
       +'<td style="color:'+bfC+';font-weight:600">'+(r.bf!=null?r.bf+"%":"—")+'</td>'
       +'<td style="color:'+imcC+'">'+(r.imc!=null?r.imc:"—")+'</td>'
       +'<td style="color:'+kc+'">'+(r.km!=null?(r.km>0?r.km:"0"):"—")+'</td>'
       +'<td style="color:'+bkc+'">'+(( r.bike||0)>0?r.bike:"—")+'</td>'
       +'<td style="font-size:12px">'+ic+'</td>'
-      +'<td style="color:#4b5563;font-size:10px;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(r.nota||"")+'</td>';
+      +'<td style="color:#4b5563;font-size:10px;max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(r.nota||"")+'</td>';
     tb.appendChild(tr);
   });
 }
 
-// ── EXPORT EXCEL (SheetJS) ────────────────────────────────────────────────────
 function exportXLSX(){
-  try {
-    var rows=[["Fecha","Peso (kg)","Body Fat %","IMC","Km caminados","Km bici","Vuelo","Inyeccion","Gym","Nota"]];
-    D.slice().reverse().forEach(function(r){
-      rows.push([r.date,r.peso!=null?r.peso:"",r.bf!=null?r.bf:"",r.imc!=null?r.imc:"",
-        r.km!=null?r.km:"",( r.bike||0)>0?r.bike:"",
-        r.vuelo?"Si":"",r.iny?"Si":"",r.gym?"Si":"",(r.nota||"")]);
-    });
-    var wb=XLSX.utils.book_new();
-    var ws=XLSX.utils.aoa_to_sheet(rows);
-    // Column widths
-    ws["!cols"]=[{wch:10},{wch:10},{wch:12},{wch:8},{wch:14},{wch:10},{wch:8},{wch:12},{wch:8},{wch:30}];
+  try{
+    var rows=[["Fecha","Ciudad","Peso (kg)","Body Fat %","IMC","Km caminados","Km bici","Vuelo","Inyeccion","Gym","Nota"]];
+    D.slice().reverse().forEach(function(r){rows.push([r.date,r.city||"",r.peso!=null?r.peso:"",r.bf!=null?r.bf:"",r.imc!=null?r.imc:"",r.km!=null?r.km:"",(r.bike||0)>0?r.bike:"",r.vuelo?"Si":"",r.iny?"Si":"",r.gym?"Si":"",(r.nota||"")]);});
+    var wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(rows);
+    ws["!cols"]=[{wch:10},{wch:14},{wch:10},{wch:12},{wch:8},{wch:14},{wch:10},{wch:8},{wch:12},{wch:8},{wch:30}];
     XLSX.utils.book_append_sheet(wb,ws,"Mi Progreso");
     XLSX.writeFile(wb,"mi-progreso-"+new Date().toISOString().slice(0,10)+".xlsx");
     toast("✅ Excel descargado");
-  } catch(e){toast("⚠️ Error: "+e.message);console.error(e);}
+  }catch(e){toast("⚠️ Error: "+e.message);console.error(e);}
 }
 
-// ── EXPORT CSV ────────────────────────────────────────────────────────────────
 function exportCSV(){
-  try {
-    var rows=["Fecha,Peso,BF%,IMC,Km caminados,Km bici,Vuelo,Inyeccion,Gym,Nota"];
-    D.slice().reverse().forEach(function(r){
-      rows.push([r.date,r.peso!=null?r.peso:"",r.bf!=null?r.bf:"",r.imc!=null?r.imc:"",
-        r.km!=null?r.km:"",(r.bike||0)>0?r.bike:"",
-        r.vuelo?"Si":"",r.iny?"Si":"",r.gym?"Si":"",
-        '"'+(r.nota||"").replace(/"/g,"'")+'"'].join(","));
-    });
-    var csv=rows.join("\n");
-    var blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
-    var url=URL.createObjectURL(blob);
-    var a=document.createElement("a");a.href=url;
-    a.download="mi-progreso-"+new Date().toISOString().slice(0,10)+".csv";
-    document.body.appendChild(a);a.click();document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  try{
+    var rows=["Fecha,Ciudad,Peso,BF%,IMC,Km caminados,Km bici,Vuelo,Inyeccion,Gym,Nota"];
+    D.slice().reverse().forEach(function(r){rows.push([r.date,'"'+(r.city||"").replace(/"/g,"'")+'"',r.peso!=null?r.peso:"",r.bf!=null?r.bf:"",r.imc!=null?r.imc:"",r.km!=null?r.km:"",(r.bike||0)>0?r.bike:"",r.vuelo?"Si":"",r.iny?"Si":"",r.gym?"Si":"",'"'+(r.nota||"").replace(/"/g,"'")+'"'].join(","));});
+    var blob=new Blob(["\uFEFF"+rows.join("\n")],{type:"text/csv;charset=utf-8;"});
+    var url=URL.createObjectURL(blob),a=document.createElement("a");
+    a.href=url;a.download="mi-progreso-"+new Date().toISOString().slice(0,10)+".csv";
+    document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
     toast("✅ CSV descargado");
-  } catch(e){toast("⚠️ Error: "+e.message);}
+  }catch(e){toast("⚠️ Error: "+e.message);}
 }
 
-// ── PDF ───────────────────────────────────────────────────────────────────────
 function genPDF(){
   toast("⏳ Generando PDF...");
   setTimeout(function(){
     try{
-      var JsPDF=window.jspdf.jsPDF,s=stats();
-      var doc=new JsPDF({orientation:"portrait",unit:"mm",format:"a4"});
+      var JsPDF=window.jspdf.jsPDF,s=stats(),doc=new JsPDF({orientation:"portrait",unit:"mm",format:"a4"});
       var W=210,M=16,y=0;
-      doc.setFillColor(6,78,59);doc.rect(0,0,W,36,"F");
-      doc.setTextColor(110,231,183);doc.setFontSize(20);doc.setFont("helvetica","bold");
-      doc.text("Mi Progreso de Salud",M,17);
+      doc.setFillColor(6,78,59);doc.rect(0,0,W,36,"F");doc.setTextColor(110,231,183);doc.setFontSize(20);doc.setFont("helvetica","bold");doc.text("Mi Progreso de Salud",M,17);
       doc.setFontSize(9);doc.setTextColor(100,200,150);doc.setFont("helvetica","normal");
       doc.text("Generado el "+new Date().toLocaleDateString("es-ES",{day:"2-digit",month:"long",year:"numeric"})+"  ·  "+(D[0]?D[0].date:"")+" - "+(D[D.length-1]?D[D.length-1].date:""),M,27);
       y=46;
       var bxs=[{l:"Bajada peso",v:s.bajada+" kg",sb:s.pi+" -> "+s.pa+" kg"},{l:"Minimo",v:s.pm+" kg",sb:s.pmDate},{l:"BF inicial",v:s.bfI!=null?s.bfI+"%":"—",sb:"body fat"},{l:"BF actual",v:s.bfA!=null?s.bfA+"%":"—",sb:"body fat"},{l:"Km caminados",v:s.kmTotal+" km",sb:s.diasKm+" dias"},{l:"Km bici",v:s.bikeTotal+" km",sb:s.diasBike+" dias"},{l:"Inyecciones",v:""+s.inyecciones,sb:"dosis"},{l:"Vuelos",v:""+s.vuelos,sb:"vuelos"}];
       var bw=(W-M*2-9)/2;
       bxs.forEach(function(b,i){var x=M+(i%2)*(bw+9),by=y+Math.floor(i/2)*26;doc.setFillColor(15,23,42);doc.roundedRect(x,by,bw,22,3,3,"F");doc.setFontSize(8);doc.setTextColor(107,114,128);doc.setFont("helvetica","normal");doc.text(b.l.toUpperCase(),x+4,by+7);doc.setFontSize(13);doc.setTextColor(110,231,183);doc.setFont("helvetica","bold");doc.text(b.v,x+4,by+16);doc.setFontSize(7);doc.setTextColor(100,116,139);doc.setFont("helvetica","normal");doc.text(b.sb,x+bw-4,by+16,{align:"right"});});
-      y+=4*26+6;
-      doc.setFillColor(6,78,59);doc.rect(M,y,W-M*2,8,"F");doc.setFontSize(9);doc.setTextColor(110,231,183);doc.setFont("helvetica","bold");doc.text("REGISTRO COMPLETO",M+4,y+5.5);y+=12;
-      var cols=[{h:"Fecha",w:22},{h:"Peso",w:17},{h:"BF%",w:14},{h:"IMC",w:14},{h:"Km cam",w:17},{h:"Km bici",w:17},{h:"Nota",w:W-M*2-22-17-14-14-17-17}];
+      y+=4*26+6;doc.setFillColor(6,78,59);doc.rect(M,y,W-M*2,8,"F");doc.setFontSize(9);doc.setTextColor(110,231,183);doc.setFont("helvetica","bold");doc.text("REGISTRO COMPLETO",M+4,y+5.5);y+=12;
+      var cols=[{h:"Fecha",w:20},{h:"Ciudad",w:24},{h:"Peso",w:16},{h:"BF%",w:13},{h:"IMC",w:13},{h:"Km cam",w:16},{h:"Km bici",w:16},{h:"Nota",w:W-M*2-20-24-16-13-13-16-16}];
       var x=M;doc.setFillColor(22,33,62);doc.rect(M,y,W-M*2,7,"F");doc.setFontSize(7.5);doc.setTextColor(110,231,183);doc.setFont("helvetica","bold");cols.forEach(function(c){doc.text(c.h,x+2,y+5);x+=c.w;});y+=8;
       D.forEach(function(r,i){
         if(y>272){doc.addPage();y=16;x=M;doc.setFillColor(22,33,62);doc.rect(M,y,W-M*2,7,"F");doc.setFontSize(7.5);doc.setTextColor(110,231,183);doc.setFont("helvetica","bold");cols.forEach(function(c){doc.text(c.h,x+2,y+5);x+=c.w;});y+=8;}
         if(i%2===0){doc.setFillColor(15,23,42);doc.rect(M,y,W-M*2,6.5,"F");}
         x=M;doc.setFontSize(7.5);doc.setFont("helvetica","normal");
         doc.setTextColor(148,163,184);doc.text(r.date,x+2,y+4.5);x+=cols[0].w;
-        doc.setTextColor(r.peso?241:55,r.peso?245:65,r.peso?249:81);doc.text(r.peso!=null?r.peso+"kg":"—",x+2,y+4.5);x+=cols[1].w;
-        doc.setTextColor(251,146,60);doc.text(r.bf!=null?r.bf+"%":"—",x+2,y+4.5);x+=cols[2].w;
-        doc.setTextColor(45,212,191);doc.text(r.imc!=null?""+r.imc:"—",x+2,y+4.5);x+=cols[3].w;
-        doc.setTextColor(r.km>0?147:55,r.km>0?197:65,r.km>0?253:81);doc.text(r.km!=null?(r.km>0?r.km+"km":"0"):"—",x+2,y+4.5);x+=cols[4].w;
-        doc.setTextColor(167,139,250);doc.text((r.bike||0)>0?r.bike+"km":"—",x+2,y+4.5);x+=cols[5].w;
-        doc.setTextColor(107,114,128);doc.text((r.nota||"").substring(0,30),x+2,y+4.5);
-        y+=6.5;
+        doc.setTextColor(148,163,184);doc.text((r.city||"").substring(0,12),x+2,y+4.5);x+=cols[1].w;
+        doc.setTextColor(r.peso?241:55,r.peso?245:65,r.peso?249:81);doc.text(r.peso!=null?r.peso+"kg":"—",x+2,y+4.5);x+=cols[2].w;
+        doc.setTextColor(251,146,60);doc.text(r.bf!=null?r.bf+"%":"—",x+2,y+4.5);x+=cols[3].w;
+        doc.setTextColor(45,212,191);doc.text(r.imc!=null?""+r.imc:"—",x+2,y+4.5);x+=cols[4].w;
+        doc.setTextColor(r.km>0?147:55,r.km>0?197:65,r.km>0?253:81);doc.text(r.km!=null?(r.km>0?r.km+"km":"0"):"—",x+2,y+4.5);x+=cols[5].w;
+        doc.setTextColor(167,139,250);doc.text((r.bike||0)>0?r.bike+"km":"—",x+2,y+4.5);x+=cols[6].w;
+        doc.setTextColor(107,114,128);doc.text((r.nota||"").substring(0,28),x+2,y+4.5);y+=6.5;
       });
       var pg=doc.internal.getNumberOfPages();for(var p=1;p<=pg;p++){doc.setPage(p);doc.setFontSize(7);doc.setTextColor(55,65,81);doc.text("Pag. "+p+"/"+pg,W-M,290,{align:"right"});}
       doc.save("mi-progreso-salud.pdf");toast("✅ PDF descargado");
@@ -655,25 +559,21 @@ function genPDF(){
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 (function(){
-  // Disable Chart.js animations globally
   if(window.Chart){Chart.defaults.animation=false;Chart.defaults.animations=false;Chart.defaults.transitions={};}
-  // Set today's date
   var n=new Date();
   document.getElementById("f-date").value=String(n.getDate()).padStart(2,"0")+"/"+String(n.getMonth()+1).padStart(2,"0");
-  // Show altura field if not saved yet
   var alt=getAlt();
   if(!alt){
-    var altDiv=document.createElement("div");altDiv.className="fld";altDiv.id="alt-once";
-    altDiv.innerHTML='<span class="lbl">TU ALTURA (cm) — solo la primera vez</span><input class="inp" id="f-alt" type="number" step="1" placeholder="175"/><p style="font-size:11px;color:var(--muted);margin-top:5px">Para calcular IMC. Se guarda y no se vuelve a pedir.</p>';
-    var bfField=document.getElementById("f-bf").closest(".fld");
-    bfField.parentNode.insertBefore(altDiv,bfField);
+    var altDiv=document.createElement("div");altDiv.className="fld";
+    altDiv.innerHTML='<span class="lbl">TU ALTURA (cm) — solo la primera vez</span><input class="inp" id="f-alt" type="number" step="1" placeholder="175"/><p class="city-hint">Se guarda para calcular IMC automáticamente</p>';
+    document.getElementById("f-bf").closest(".fld").parentNode.insertBefore(altDiv,document.getElementById("f-bf").closest(".fld"));
     document.getElementById("f-alt").addEventListener("change",function(){var v=+this.value;if(v>100&&v<250){setAlt(v);altDiv.style.display="none";}});
   }
-  // Show save bar on registro tab
   document.getElementById("save-bar").style.display="block";
   renderLastPeso();
   renderDash();
 })();
+</script>
 </script>
 </body>
 </html>
