@@ -186,6 +186,57 @@ tr:nth-child(even) td{background:rgba(255,255,255,.015);}
   <div id="ev-list"></div>
 </div>
 
+<!-- SALUD -->
+<div class="pg" id="pg-salud">
+  <h2 style="margin-bottom:4px">Salud</h2>
+  <p style="font-size:11px;color:var(--muted);margin-bottom:16px">Datos de Apple Watch y balanza Wyze</p>
+
+  <div class="g2">
+    <div class="sc"><div class="sl">PASOS PROMEDIO</div><div class="sv" style="color:var(--blue)" id="h-stepsavg">—</div><div class="ss" id="h-stepsdays"></div></div>
+    <div class="sc"><div class="sl">FC REPOSO PROMEDIO</div><div class="sv" style="color:var(--pink)" id="h-rhravg">—</div><div class="ss">latidos/min</div></div>
+  </div>
+
+  <div class="bc-card">
+    <div class="bc-title">COMPOSICIÓN CORPORAL — BALANZA (ÚLTIMA MEDICIÓN)</div>
+    <div class="bc-grid">
+      <div class="bc-item"><div class="bc-lbl">Grasa visceral</div><div class="bc-val" style="color:var(--orange)" id="h-visceral">—</div><div class="bc-sub">nivel (1-59)</div></div>
+      <div class="bc-item"><div class="bc-lbl">Masa muscular</div><div class="bc-val" style="color:var(--teal)" id="h-muscle">—</div><div class="bc-sub">% del peso</div></div>
+      <div class="bc-item"><div class="bc-lbl">Agua corporal</div><div class="bc-val" style="color:var(--blue)" id="h-water">—</div><div class="bc-sub">% medido (real)</div></div>
+      <div class="bc-item"><div class="bc-lbl">Masa ósea</div><div class="bc-val" style="color:var(--amber)" id="h-bone">—</div><div class="bc-sub">kg</div></div>
+      <div class="bc-item"><div class="bc-lbl">BMR</div><div class="bc-val" style="color:var(--green)" id="h-bmr">—</div><div class="bc-sub">kcal/día en reposo</div></div>
+      <div class="bc-item"><div class="bc-lbl">Edad metabólica</div><div class="bc-val" style="color:var(--purple)" id="h-metage">—</div><div class="bc-sub">vs edad real</div></div>
+    </div>
+    <div style="margin-top:12px;font-size:10px;color:var(--muted);border-top:1px solid var(--brd);padding-top:10px;">Grasa visceral: saludable 1–9 · alto 10–14 · muy alto ≥15. Estos datos vienen de la balanza Wyze, más precisos que estimaciones.</div>
+  </div>
+
+  <div class="cc">
+    <p class="ct2" style="color:var(--blue)">🚶 Pasos diarios (Apple Watch / iPhone)</p>
+    <canvas id="c-steps"></canvas>
+  </div>
+
+  <div class="cc">
+    <p class="ct2" style="color:var(--pink)">❤️ Frecuencia cardíaca en reposo</p>
+    <canvas id="c-rhr"></canvas>
+    <p style="font-size:10px;color:var(--muted);margin-top:6px;padding-left:4px">Tiende a bajar con mejor estado físico y pérdida de peso</p>
+  </div>
+
+  <div class="cc">
+    <p class="ct2" style="color:var(--orange)">🔥 Grasa visceral (balanza)</p>
+    <canvas id="c-visc"></canvas>
+  </div>
+
+  <div class="cc">
+    <p class="ct2" style="color:var(--teal)">💪 Masa muscular % (balanza)</p>
+    <canvas id="c-muscle"></canvas>
+  </div>
+
+  <div class="cc" id="wrap-sleep">
+    <p class="ct2" style="color:var(--purple)">😴 Sueño (horas)</p>
+    <div id="ph-sleep" class="ph">Datos parciales — pocas noches con Apple Watch puesto</div>
+    <canvas id="c-sleep" style="display:none"></canvas>
+  </div>
+</div>
+
 <!-- TABLA -->
 <div class="pg" id="pg-tabla">
   <h2 style="margin-bottom:16px">Tabla completa</h2>
@@ -206,6 +257,7 @@ tr:nth-child(even) td{background:rgba(255,255,255,.015);}
   <button onclick="ir('dash',this)"><span class="ni">📊</span><span class="nl">Resumen</span><div class="nd"></div></button>
   <button onclick="ir('graf',this)"><span class="ni">📈</span><span class="nl">Gráficas</span><div class="nd"></div></button>
   <button onclick="ir('events',this)"><span class="ni">🗓</span><span class="nl">Eventos</span><div class="nd"></div></button>
+  <button onclick="ir('salud',this)"><span class="ni">❤️</span><span class="nl">Salud</span><div class="nd"></div></button>
   <button onclick="ir('tabla',this)"><span class="ni">📋</span><span class="nl">Tabla</span><div class="nd"></div></button>
 </nav>
 </div>
@@ -214,69 +266,206 @@ tr:nth-child(even) td{background:rgba(255,255,255,.015);}
 <script>
 // ── BASE DATA (hardcoded, never lost) ─────────────────────────────────────────
 var BASE = [
-  {date:"04/03",city:"",     peso:100.7,bf:null, imc:null, km:null, bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"27/03",city:"",     peso:100.0,bf:null, imc:null, km:null, bike:null,vuelo:false,iny:true,  gym:false,nota:"1a inyeccion"},
-  {date:"28/03",city:"",     peso:99.2, bf:null, imc:null, km:null, bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"29/03",city:"",     peso:99.0, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"30/03",city:"",     peso:98.8, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"31/03",city:"",     peso:97.9, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"01/04",city:"",     peso:97.8, bf:null, imc:null, km:4.7,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"02/04",city:"",     peso:97.1, bf:null, imc:null, km:7.5,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"03/04",city:"",     peso:97.4, bf:null, imc:null, km:null, bike:null,vuelo:false,iny:true,  gym:false,nota:"2a inyeccion"},
-  {date:"04/04",city:"",     peso:97.4, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"05/04",city:"",     peso:97.7, bf:null, imc:null, km:7.5,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"06/04",city:"",     peso:97.9, bf:null, imc:null, km:0,    bike:null,vuelo:false,iny:false, gym:false,nota:"No camine"},
-  {date:"07/04",city:"",     peso:96.9, bf:null, imc:null, km:7,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"08/04",city:"",     peso:96.7, bf:null, imc:null, km:7,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"09/04",city:"",     peso:96.3, bf:null, imc:null, km:10,   bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"10/04",city:"",     peso:96.4, bf:null, imc:29.8, km:7,    bike:null,vuelo:false,iny:true,  gym:false,nota:"Inyeccion"},
-  {date:"11/04",city:"",     peso:96.0, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"12/04",city:"",     peso:95.8, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"13/04",city:"PTY",  peso:95.6, bf:null, imc:null, km:5,    bike:null,vuelo:true, iny:false, gym:false,nota:"Viaje a PTY"},
-  {date:"14/04",city:"PTY",  peso:null, bf:null, imc:null, km:4,    bike:null,vuelo:false,iny:false, gym:false,nota:"PTY"},
-  {date:"15/04",city:"PTY",  peso:null, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:"PTY"},
-  {date:"16/04",city:"PTY",  peso:null, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:"PTY"},
-  {date:"17/04",city:"PTY",  peso:null, bf:null, imc:null, km:5.5,  bike:null,vuelo:false,iny:false, gym:false,nota:"PTY"},
-  {date:"18/04",city:"PTY",  peso:null, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:true,  gym:false,nota:"Inyeccion"},
-  {date:"19/04",city:"",     peso:94.1, bf:null, imc:null, km:0,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"20/04",city:"Chile",peso:94.8, bf:null, imc:null, km:0,    bike:null,vuelo:true, iny:false, gym:false,nota:"Viaje a Chile"},
-  {date:"21/04",city:"Chile",peso:null, bf:null, imc:null, km:2,    bike:null,vuelo:false,iny:false, gym:true, nota:"Gimnasio 30 min"},
-  {date:"22/04",city:"Chile",peso:null, bf:null, imc:null, km:4,    bike:null,vuelo:false,iny:false, gym:false,nota:"Chile"},
-  {date:"23/04",city:"Chile",peso:null, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:"Chile"},
-  {date:"24/04",city:"Chile",peso:null, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:"Chile"},
-  {date:"25/04",city:"",     peso:93.0, bf:null, imc:28.7, km:4,    bike:null,vuelo:false,iny:true,  gym:false,nota:"Inyeccion"},
-  {date:"26/04",city:"",     peso:93.3, bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"27/04",city:"Panama",peso:93.2,bf:null, imc:null, km:3,    bike:null,vuelo:true, iny:false, gym:false,nota:"Viaje a Panama"},
-  {date:"28/04",city:"Panama",peso:null,bf:null, imc:null, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"29/04",city:"",     peso:92.0, bf:null, imc:28.4, km:4,    bike:null,vuelo:false,iny:false, gym:false,nota:"Cambio de balanza"},
-  {date:"30/04",city:"",     peso:null, bf:null, imc:null, km:null, bike:null,vuelo:true, iny:false, gym:false,nota:"Vuelo"},
-  {date:"01/05",city:"",     peso:90.6, bf:null, imc:28.0, km:7,    bike:null,vuelo:false,iny:true,  gym:false,nota:"Inyeccion"},
-  {date:"02/05",city:"",     peso:91.4, bf:null, imc:28.2, km:7,    bike:2.5, vuelo:false,iny:false, gym:false,nota:""},
-  {date:"03/05",city:"",     peso:91.1, bf:null, imc:28.1, km:4.7,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"04/05",city:"",     peso:90.8, bf:27.0, imc:28.0, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"05/05",city:"",     peso:90.2, bf:26.5, imc:27.8, km:null, bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"06/05",city:"",     peso:89.9, bf:26.6, imc:27.7, km:7,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"07/05",city:"",     peso:89.9, bf:26.5, imc:27.7, km:7,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"08/05",city:"",     peso:89.4, bf:26.5, imc:27.6, km:null, bike:null,vuelo:false,iny:true,  gym:false,nota:"Inyeccion"},
-  {date:"09/05",city:"",     peso:88.6, bf:26.7, imc:27.3, km:3,    bike:13.5,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"10/05",city:"",     peso:88.6, bf:26.1, imc:27.3, km:4.7,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"11/05",city:"",     peso:89.5, bf:26.4, imc:27.6, km:3,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"12/05",city:"",     peso:88.1, bf:24.4, imc:27.2, km:null, bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"13/05",city:"",     peso:88.9, bf:24.7, imc:27.4, km:null, bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"14/05",city:"",     peso:88.8, bf:25.1, imc:27.4, km:null, bike:null,vuelo:true, iny:true,  gym:false,nota:"Inyeccion · Vuelo"},
-  {date:"15/05",city:"",     peso:null, bf:null, imc:null, km:5,    bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"16/05",city:"",     peso:null, bf:null, imc:null, km:9.7,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"17/05",city:"",     peso:null, bf:null, imc:null, km:12,   bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"18/05",city:"",     peso:null, bf:null, imc:null, km:12,   bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"19/05",city:"",     peso:null, bf:null, imc:null, km:9.2,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"20/05",city:"",     peso:null, bf:null, imc:null, km:10,   bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"21/05",city:"Las Vegas",peso:null,bf:null,imc:null,km:22,  bike:null,vuelo:false,iny:false, gym:false,nota:"En las vegas de paseo con Lau"},
-  {date:"22/05",city:"Las Vegas",peso:null,bf:null,imc:null,km:11.5,bike:null,vuelo:false,iny:false, gym:false,nota:"Cambio de hotel en las vegas"},
-  {date:"23/05",city:"Las Vegas",peso:null,bf:null,imc:null,km:21,  bike:null,vuelo:false,iny:false, gym:false,nota:""},
-  {date:"24/05",city:"Las Vegas",peso:null,bf:null,imc:null,km:12,  bike:null,vuelo:false,iny:false, gym:false,nota:""}
+  {date:"04/03",city:"",peso:100.7,bf:null,imc:null,km:null,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"27/03",city:"",peso:100.0,bf:null,imc:null,km:null,bike:null,vuelo:false,iny:true,gym:false,nota:"1a inyeccion"},
+  {date:"28/03",city:"",peso:99.2,bf:null,imc:null,km:null,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"29/03",city:"",peso:99.0,bf:null,imc:null,km:5.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"30/03",city:"",peso:98.8,bf:null,imc:null,km:5.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"31/03",city:"",peso:97.9,bf:null,imc:null,km:5.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"01/04",city:"",peso:97.8,bf:null,imc:null,km:4.7,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"02/04",city:"",peso:97.1,bf:null,imc:null,km:7.5,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"03/04",city:"",peso:97.4,bf:null,imc:null,km:null,bike:null,vuelo:false,iny:true,gym:false,nota:"2a inyeccion"},
+  {date:"04/04",city:"",peso:97.4,bf:null,imc:null,km:3.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"05/04",city:"",peso:97.7,bf:null,imc:null,km:7.5,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"06/04",city:"",peso:97.9,bf:null,imc:null,km:0.0,bike:null,vuelo:false,iny:false,gym:false,nota:"No camine"},
+  {date:"07/04",city:"",peso:96.9,bf:null,imc:null,km:7.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"08/04",city:"",peso:96.7,bf:null,imc:null,km:7.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"09/04",city:"",peso:96.3,bf:null,imc:null,km:10.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"10/04",city:"",peso:96.4,bf:null,imc:29.8,km:7.0,bike:null,vuelo:false,iny:true,gym:false,nota:"Inyeccion"},
+  {date:"11/04",city:"",peso:96.0,bf:null,imc:null,km:3.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"12/04",city:"",peso:95.8,bf:null,imc:null,km:3.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"13/04",city:"PTY",peso:95.6,bf:null,imc:null,km:5.0,bike:null,vuelo:true,iny:false,gym:false,nota:"Viaje a PTY"},
+  {date:"14/04",city:"PTY",peso:null,bf:null,imc:null,km:4.0,bike:null,vuelo:false,iny:false,gym:false,nota:"PTY"},
+  {date:"15/04",city:"PTY",peso:null,bf:null,imc:null,km:5.0,bike:null,vuelo:false,iny:false,gym:false,nota:"PTY"},
+  {date:"16/04",city:"PTY",peso:null,bf:null,imc:null,km:5.0,bike:null,vuelo:false,iny:false,gym:false,nota:"PTY"},
+  {date:"17/04",city:"PTY",peso:null,bf:null,imc:null,km:5.5,bike:null,vuelo:false,iny:false,gym:false,nota:"PTY"},
+  {date:"18/04",city:"PTY",peso:null,bf:null,imc:null,km:3.0,bike:null,vuelo:false,iny:true,gym:false,nota:"Inyeccion"},
+  {date:"19/04",city:"",peso:94.1,bf:null,imc:null,km:0.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"20/04",city:"Chile",peso:94.8,bf:null,imc:null,km:0.0,bike:null,vuelo:true,iny:false,gym:false,nota:"Viaje a Chile"},
+  {date:"21/04",city:"Chile",peso:null,bf:null,imc:null,km:2.0,bike:null,vuelo:false,iny:false,gym:true,nota:"Gimnasio 30 min"},
+  {date:"22/04",city:"Chile",peso:null,bf:null,imc:null,km:4.0,bike:null,vuelo:false,iny:false,gym:false,nota:"Chile"},
+  {date:"23/04",city:"Chile",peso:null,bf:null,imc:null,km:5.0,bike:null,vuelo:false,iny:false,gym:false,nota:"Chile"},
+  {date:"24/04",city:"Chile",peso:null,bf:null,imc:null,km:3.0,bike:null,vuelo:false,iny:false,gym:false,nota:"Chile"},
+  {date:"25/04",city:"",peso:93.0,bf:null,imc:28.7,km:4.0,bike:null,vuelo:false,iny:true,gym:false,nota:"Inyeccion"},
+  {date:"26/04",city:"",peso:93.3,bf:null,imc:null,km:3.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"27/04",city:"Panama",peso:93.2,bf:null,imc:null,km:3.0,bike:null,vuelo:true,iny:false,gym:false,nota:"Viaje a Panama"},
+  {date:"28/04",city:"Panama",peso:null,bf:null,imc:null,km:3.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"29/04",city:"",peso:92.0,bf:null,imc:28.4,km:4.0,bike:null,vuelo:false,iny:false,gym:false,nota:"Cambio de balanza"},
+  {date:"30/04",city:"",peso:null,bf:null,imc:null,km:null,bike:null,vuelo:true,iny:false,gym:false,nota:"Vuelo"},
+  {date:"01/05",city:"Argentina",peso:90.6,bf:null,imc:28.0,km:7.0,bike:null,vuelo:false,iny:true,gym:false,nota:"Inyeccion"},
+  {date:"02/05",city:"Argentina",peso:91.4,bf:null,imc:28.2,km:7.0,bike:2.5,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"03/05",city:"Argentina",peso:91.1,bf:null,imc:28.1,km:4.7,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"04/05",city:"Argentina",peso:90.8,bf:27.0,imc:28.0,km:5.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"05/05",city:"Argentina",peso:90.2,bf:26.5,imc:27.8,km:null,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"06/05",city:"Argentina",peso:89.9,bf:26.6,imc:27.7,km:7.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"07/05",city:"Argentina",peso:89.9,bf:26.5,imc:27.7,km:7.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"08/05",city:"Argentina",peso:89.4,bf:26.5,imc:27.6,km:null,bike:null,vuelo:false,iny:true,gym:false,nota:"Inyeccion"},
+  {date:"09/05",city:"Argentina",peso:88.6,bf:26.7,imc:27.3,km:3.0,bike:13.5,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"10/05",city:"Argentina",peso:88.6,bf:26.1,imc:27.3,km:4.7,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"11/05",city:"Argentina",peso:89.5,bf:26.4,imc:27.6,km:3.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"12/05",city:"Argentina",peso:88.1,bf:24.4,imc:27.2,km:null,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"13/05",city:"Argentina",peso:88.9,bf:24.7,imc:27.4,km:null,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"14/05",city:"Argentina",peso:88.8,bf:25.1,imc:27.4,km:4.9,bike:null,vuelo:true,iny:true,gym:false,nota:"Inyeccion · Vuelo"},
+  {date:"15/05",city:"Panama",peso:null,bf:null,imc:null,km:5.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"16/05",city:"Las vegas",peso:null,bf:null,imc:null,km:9.7,bike:null,vuelo:true,iny:false,gym:false,nota:"Vuelo"},
+  {date:"17/05",city:"Las vegas",peso:null,bf:null,imc:null,km:12.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"18/05",city:"Las vegas",peso:null,bf:null,imc:null,km:12.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"19/05",city:"Las vegas",peso:null,bf:null,imc:null,km:9.2,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"20/05",city:"Las vegas",peso:null,bf:null,imc:null,km:10.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"21/05",city:"Las Vegas",peso:null,bf:null,imc:null,km:22.0,bike:null,vuelo:false,iny:false,gym:false,nota:"En las vegas de paseo con Lau"},
+  {date:"22/05",city:"Las Vegas",peso:null,bf:null,imc:null,km:11.5,bike:null,vuelo:false,iny:false,gym:false,nota:"Cambio de hotel en las vegas"},
+  {date:"23/05",city:"Las Vegas",peso:null,bf:null,imc:null,km:21.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"24/05",city:"Las Vegas",peso:null,bf:null,imc:null,km:12.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"25/05",city:"Las vegas",peso:null,bf:null,imc:null,km:7.0,bike:null,vuelo:true,iny:false,gym:false,nota:"Vuelo"},
+  {date:"26/05",city:"Panamá",peso:null,bf:null,imc:null,km:7.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"27/05",city:"Panamá",peso:null,bf:null,imc:null,km:9.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"28/05",city:"Panamá",peso:null,bf:null,imc:null,km:12.0,bike:null,vuelo:true,iny:false,gym:false,nota:"Vuelo"},
+  {date:"29/05",city:"Argentina",peso:86.4,bf:23.9,imc:26.7,km:7.0,bike:null,vuelo:false,iny:true,gym:false,nota:"Inyeccion"},
+  {date:"30/05",city:"Argentina",peso:86.1,bf:23.6,imc:26.6,km:5.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"31/05",city:"Argentina",peso:85.3,bf:24.3,imc:26.3,km:null,bike:25.5,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"01/06",city:"Argentina",peso:85.4,bf:24.7,imc:26.4,km:7.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"02/06",city:"Argentina",peso:85.6,bf:25.2,imc:26.4,km:8.5,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"03/06",city:"Argentina",peso:84.9,bf:24.9,imc:26.2,km:4.8,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"04/06",city:"Argentina",peso:84.4,bf:24.6,imc:26.0,km:6.5,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"05/06",city:"Argentina",peso:84.2,bf:25.4,imc:26.0,km:5.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"06/06",city:"Argentina",peso:84.1,bf:24.8,imc:26.0,km:null,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"07/06",city:"Argentina",peso:85.0,bf:25.0,imc:26.2,km:null,bike:null,vuelo:true,iny:false,gym:false,nota:"Vuelo"},
+  {date:"08/06",city:"Panamá",peso:null,bf:null,imc:null,km:8.0,bike:null,vuelo:true,iny:false,gym:false,nota:"Vuelo"},
+  {date:"09/06",city:"Austin",peso:null,bf:null,imc:null,km:5.0,bike:null,vuelo:false,iny:false,gym:true,nota:"Gym"},
+  {date:"10/06",city:"Austin",peso:null,bf:null,imc:null,km:5.0,bike:null,vuelo:false,iny:false,gym:true,nota:"Gym"},
+  {date:"11/06",city:"Austin",peso:null,bf:null,imc:null,km:5.0,bike:null,vuelo:true,iny:false,gym:true,nota:"Gym · Vuelo"},
+  {date:"12/06",city:"Panamá",peso:null,bf:null,imc:null,km:5.0,bike:null,vuelo:false,iny:false,gym:true,nota:"Gym"},
+  {date:"13/06",city:"Panamá",peso:null,bf:null,imc:null,km:8.0,bike:null,vuelo:true,iny:false,gym:true,nota:"Gym · Vuelo"},
+  {date:"14/06",city:"Argentina",peso:84.9,bf:24.7,imc:26.2,km:7.0,bike:null,vuelo:false,iny:true,gym:false,nota:"Inyeccion"},
+  {date:"15/06",city:"Argentina",peso:85.1,bf:24.5,imc:26.3,km:12.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"16/06",city:"Argentina",peso:84.5,bf:24.4,imc:26.1,km:5.0,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"17/06",city:"Argentina",peso:85.0,bf:24.6,imc:26.2,km:null,bike:null,vuelo:false,iny:false,gym:false,nota:""},
+  {date:"19/06",city:"Argentina",peso:84.3,bf:23.1,imc:26.0,km:null,bike:null,vuelo:true,iny:false,gym:false,nota:"Vuelo"}
 ];
 
-var SK="ht_v13", SK_ALT="ht_altura_v1";
+// ── HEALTH DATA (Apple Health + Wyze Scale) ──────────────────────────────────
+var HEALTH = [
+  {date:"04/03",steps:5716,rhr:60,sleepH:6.3,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"05/03",steps:6039,rhr:59,sleepH:5.4,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"06/03",steps:5500,rhr:59,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"07/03",steps:9648,rhr:67,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"08/03",steps:5155,rhr:66,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"09/03",steps:4163,rhr:62,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"10/03",steps:4672,rhr:59,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"11/03",steps:4159,rhr:59,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"12/03",steps:5303,rhr:62,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"13/03",steps:11958,rhr:62,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"14/03",steps:13210,rhr:59,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"15/03",steps:13162,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"16/03",steps:6003,rhr:69,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"17/03",steps:2775,rhr:65,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"18/03",steps:7565,rhr:67,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"19/03",steps:6751,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"20/03",steps:4127,rhr:62,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"21/03",steps:4393,rhr:70,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"22/03",steps:5326,rhr:67,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"23/03",steps:4600,rhr:71,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"24/03",steps:6811,rhr:67,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"25/03",steps:5671,rhr:67,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"26/03",steps:5209,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"27/03",steps:10112,rhr:59,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"28/03",steps:12451,rhr:64,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"29/03",steps:11537,rhr:67,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"30/03",steps:11628,rhr:65,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"31/03",steps:13697,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"01/04",steps:9648,rhr:59,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"02/04",steps:15808,rhr:69,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"03/04",steps:3358,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"04/04",steps:7014,rhr:64,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"05/04",steps:13973,rhr:56,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"06/04",steps:3493,rhr:64,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"07/04",steps:10882,rhr:59,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"08/04",steps:12788,rhr:66,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"09/04",steps:17842,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"10/04",steps:16007,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"11/04",steps:7977,rhr:66,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"12/04",steps:12928,rhr:65,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"13/04",steps:13169,rhr:62,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"14/04",steps:11174,rhr:60,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"15/04",steps:13693,rhr:61,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"16/04",steps:9445,rhr:58,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"17/04",steps:12449,rhr:66,sleepH:1.2,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"18/04",steps:10725,rhr:60,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"19/04",steps:5554,rhr:65,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"20/04",steps:10130,rhr:57,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"21/04",steps:8312,rhr:64,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"22/04",steps:11483,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"23/04",steps:13935,rhr:67,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"24/04",steps:8111,rhr:65,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"25/04",steps:12040,rhr:60,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"26/04",steps:11076,rhr:66,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"27/04",steps:6405,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"28/04",steps:13022,rhr:62,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"29/04",steps:6699,rhr:62,sleepH:null,visceral:10.0,muscleM:67.1,boneM:4.4,bodyWater:52.7,bmr:1799.0,metAge:50.0,skeletalM:41.1},
+  {date:"30/04",steps:6373,rhr:65,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"01/05",steps:16737,rhr:61,sleepH:1.0,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"02/05",steps:12023,rhr:62,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"03/05",steps:9918,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"04/05",steps:10595,rhr:64,sleepH:null,visceral:9.0,muscleM:68.2,boneM:4.4,bodyWater:53.5,bmr:1802.0,metAge:50.0,skeletalM:41.7},
+  {date:"05/05",steps:5036,rhr:65,sleepH:null,visceral:9.0,muscleM:68.6,boneM:4.4,bodyWater:53.9,bmr:1802.0,metAge:49.0,skeletalM:42.0},
+  {date:"06/05",steps:11702,rhr:65,sleepH:null,visceral:9.0,muscleM:68.5,boneM:4.4,bodyWater:53.8,bmr:1795.0,metAge:49.0,skeletalM:42.0},
+  {date:"07/05",steps:13950,rhr:70,sleepH:null,visceral:9.0,muscleM:68.6,boneM:4.4,bodyWater:53.9,bmr:1797.0,metAge:49.0,skeletalM:42.0},
+  {date:"08/05",steps:10800,rhr:66,sleepH:null,visceral:9.0,muscleM:68.6,boneM:4.4,bodyWater:53.9,bmr:1789.0,metAge:49.0,skeletalM:42.0},
+  {date:"09/05",steps:2967,rhr:69,sleepH:null,visceral:9.0,muscleM:68.5,boneM:4.4,bodyWater:53.8,bmr:1774.0,metAge:49.0,skeletalM:41.9},
+  {date:"10/05",steps:11541,rhr:65,sleepH:null,visceral:9.0,muscleM:68.8,boneM:4.4,bodyWater:54.1,bmr:1782.0,metAge:49.0,skeletalM:42.2},
+  {date:"11/05",steps:4885,rhr:60,sleepH:null,visceral:9.0,muscleM:68.7,boneM:4.4,bodyWater:54.0,bmr:1793.0,metAge:49.0,skeletalM:42.1},
+  {date:"12/05",steps:1740,rhr:59,sleepH:null,visceral:8.0,muscleM:70.5,boneM:4.49,bodyWater:55.4,bmr:1808.0,metAge:49.0,skeletalM:43.2},
+  {date:"13/05",steps:5220,rhr:59,sleepH:null,visceral:8.0,muscleM:70.3,boneM:4.49,bodyWater:55.2,bmr:1815.0,metAge:49.0,skeletalM:43.0},
+  {date:"14/05",steps:6800,rhr:72,sleepH:null,visceral:8.0,muscleM:69.9,boneM:4.4,bodyWater:54.9,bmr:1804.0,metAge:49.0,skeletalM:42.8},
+  {date:"15/05",steps:11225,rhr:60,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"16/05",steps:16418,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"17/05",steps:13070,rhr:60,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"18/05",steps:12989,rhr:60,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"19/05",steps:16540,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"20/05",steps:14485,rhr:61,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"21/05",steps:30196,rhr:64,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"22/05",steps:14336,rhr:64,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"23/05",steps:17831,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"24/05",steps:24195,rhr:61,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"25/05",steps:9730,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"26/05",steps:8428,rhr:54,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"27/05",steps:12422,rhr:64,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"28/05",steps:15186,rhr:64,sleepH:2.0,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"29/05",steps:9367,rhr:58,sleepH:null,visceral:8.0,muscleM:70.8,boneM:4.4,bodyWater:55.7,bmr:1789.0,metAge:47.0,skeletalM:43.4},
+  {date:"30/05",steps:6737,rhr:59,sleepH:null,visceral:7.0,muscleM:71.3,boneM:4.4,bodyWater:56.0,bmr:1791.0,metAge:47.0,skeletalM:43.7},
+  {date:"31/05",steps:9276,rhr:66,sleepH:null,visceral:8.0,muscleM:70.6,boneM:4.31,bodyWater:55.4,bmr:1763.0,metAge:49.0,skeletalM:43.1},
+  {date:"01/06",steps:12701,rhr:62,sleepH:null,visceral:8.0,muscleM:70.3,boneM:4.31,bodyWater:55.2,bmr:1758.0,metAge:49.0,skeletalM:43.0},
+  {date:"02/06",steps:14363,rhr:63,sleepH:null,visceral:8.0,muscleM:69.9,boneM:4.31,bodyWater:54.9,bmr:1754.0,metAge:49.0,skeletalM:42.7},
+  {date:"03/06",steps:6096,rhr:66,sleepH:null,visceral:8.0,muscleM:70.1,boneM:4.31,bodyWater:55.1,bmr:1748.0,metAge:49.0,skeletalM:42.8},
+  {date:"04/06",steps:9264,rhr:71,sleepH:null,visceral:8.0,muscleM:70.3,boneM:4.31,bodyWater:55.2,bmr:1743.0,metAge:49.0,skeletalM:43.0},
+  {date:"05/06",steps:7390,rhr:65,sleepH:null,visceral:8.0,muscleM:69.6,boneM:4.22,bodyWater:54.7,bmr:1726.0,metAge:49.0,skeletalM:42.5},
+  {date:"06/06",steps:9926,rhr:67,sleepH:null,visceral:8.0,muscleM:70.0,boneM:4.22,bodyWater:55.1,bmr:1735.0,metAge:49.0,skeletalM:42.8},
+  {date:"07/06",steps:7994,rhr:64,sleepH:null,visceral:8.0,muscleM:69.9,boneM:4.31,bodyWater:55.0,bmr:1748.0,metAge:49.0,skeletalM:42.8},
+  {date:"08/06",steps:9277,rhr:58,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"09/06",steps:11949,rhr:58,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"10/06",steps:13610,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"11/06",steps:12455,rhr:63,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"12/06",steps:12902,rhr:59,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"13/06",steps:12136,rhr:64,sleepH:6.1,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null},
+  {date:"14/06",steps:15582,rhr:58,sleepH:null,visceral:8.0,muscleM:70.3,boneM:4.31,bodyWater:55.2,bmr:1750.0,metAge:49.0,skeletalM:42.9},
+  {date:"15/06",steps:17218,rhr:65,sleepH:null,visceral:8.0,muscleM:70.5,boneM:4.31,bodyWater:55.4,bmr:1758.0,metAge:49.0,skeletalM:43.1},
+  {date:"16/06",steps:12732,rhr:62,sleepH:null,visceral:8.0,muscleM:70.5,boneM:4.31,bodyWater:55.4,bmr:1750.0,metAge:49.0,skeletalM:43.1},
+  {date:"17/06",steps:4372,rhr:53,sleepH:null,visceral:8.0,muscleM:70.4,boneM:4.31,bodyWater:55.3,bmr:1754.0,metAge:49.0,skeletalM:43.0},
+  {date:"18/06",steps:3570,rhr:64,sleepH:null,visceral:6.0,muscleM:72.8,boneM:4.4,bodyWater:57.2,bmr:1793.0,metAge:47.0,skeletalM:44.6},
+  {date:"19/06",steps:821,rhr:null,sleepH:null,visceral:null,muscleM:null,boneM:null,bodyWater:null,bmr:null,metAge:null,skeletalM:null}
+];
+
+var SK="ht_v14", SK_ALT="ht_altura_v1";
 function loadExtra(){try{var r=localStorage.getItem(SK);return r?JSON.parse(r):[];}catch(e){return[];}}
 function saveExtra(a){try{localStorage.setItem(SK,JSON.stringify(a));}catch(e){}}
 function getAlt(){try{var v=localStorage.getItem(SK_ALT);return v?+v:null;}catch(e){return null;}}
@@ -355,6 +544,7 @@ function ir(id,btn){
   if(id==="dash")  renderDash();
   if(id==="graf")  renderGraf();
   if(id==="events")renderEvents();
+  if(id==="salud") renderSalud();
   if(id==="tabla") renderTabla();
 }
 
@@ -476,6 +666,58 @@ function renderEvents(){
     div.innerHTML='<span style="font-size:18px">'+ic+'</span><span style="font-size:12px;color:var(--sub);flex-shrink:0">'+d.date+'</span><span style="font-size:13px;color:'+col+';font-weight:600;flex:1">'+(lb||ic)+'</span>'+(d.peso!=null?'<span style="font-size:12px;color:var(--muted)">'+d.peso+' kg</span>':"");
     el.appendChild(div);
   });
+}
+
+// ── SALUD (Apple Health + Wyze) ────────────────────────────────────────────────
+function renderSalud(){
+  var hs=HEALTH.filter(function(d){return d.steps!=null;});
+  var hr=HEALTH.filter(function(d){return d.rhr!=null;});
+  var hv=HEALTH.filter(function(d){return d.visceral!=null;});
+  var hm=HEALTH.filter(function(d){return d.muscleM!=null;});
+  var hsl=HEALTH.filter(function(d){return d.sleepH!=null;});
+
+  // Stat cards
+  if(hs.length>0){
+    var avgSteps=Math.round(hs.reduce(function(s,d){return s+d.steps;},0)/hs.length);
+    set("h-stepsavg",avgSteps.toLocaleString());
+    set("h-stepsdays",hs.length+" días registrados");
+  }
+  if(hr.length>0){
+    var avgRhr=Math.round(hr.reduce(function(s,d){return s+d.rhr;},0)/hr.length);
+    set("h-rhravg",avgRhr);
+  }
+  // Latest body comp from scale
+  if(hv.length>0){
+    var last=hv[hv.length-1];
+    set("h-visceral",last.visceral);
+    set("h-muscle",last.muscleM+"%");
+    set("h-water",last.bodyWater+"%");
+    set("h-bone",last.boneM+" kg");
+    set("h-bmr",last.bmr+" kcal");
+    set("h-metage",last.metAge+" años");
+  }
+
+  // Steps chart
+  if(hs.length>0){
+    mk("c-steps","190px",{type:"bar",data:{labels:hs.map(function(d){return d.date;}),datasets:[{label:"Pasos",data:hs.map(function(d){return d.steps;}),backgroundColor:hs.map(function(d){return d.steps>=10000?"rgba(45,212,191,.85)":d.steps>=6000?"rgba(147,197,253,.85)":"rgba(129,140,248,.7)";}),borderRadius:3}]},options:baseOpts()});
+  }
+  // RHR chart
+  if(hr.length>0){
+    mk("c-rhr","170px",{type:"line",data:{labels:hr.map(function(d){return d.date;}),datasets:[{label:"FC reposo",data:hr.map(function(d){return d.rhr;}),borderColor:"#f472b6",backgroundColor:"rgba(244,114,182,0.08)",borderWidth:2,pointRadius:2,tension:0.3,fill:true}]},options:baseOpts()});
+  }
+  // Visceral fat chart
+  if(hv.length>0){
+    mk("c-visc","160px",{type:"line",data:{labels:hv.map(function(d){return d.date;}),datasets:[{label:"Grasa visceral",data:hv.map(function(d){return d.visceral;}),borderColor:"#fb923c",backgroundColor:"rgba(251,146,60,0.1)",borderWidth:2.5,pointRadius:3,tension:0.3,fill:true}]},options:baseOpts(0,12,false,2)});
+  }
+  // Muscle mass chart
+  if(hm.length>0){
+    mk("c-muscle","160px",{type:"line",data:{labels:hm.map(function(d){return d.date;}),datasets:[{label:"Masa muscular %",data:hm.map(function(d){return d.muscleM;}),borderColor:"#2dd4bf",backgroundColor:"rgba(45,212,191,0.1)",borderWidth:2.5,pointRadius:3,tension:0.3,fill:true}]},options:baseOpts()});
+  }
+  // Sleep chart
+  if(hsl.length>0){
+    showC("c-sleep","ph-sleep");
+    mk("c-sleep","150px",{type:"bar",data:{labels:hsl.map(function(d){return d.date;}),datasets:[{label:"Horas",data:hsl.map(function(d){return d.sleepH;}),backgroundColor:"rgba(167,139,250,0.8)",borderRadius:4}]},options:baseOpts(0,10)});
+  } else { showP("c-sleep","ph-sleep"); }
 }
 
 function renderTabla(){
